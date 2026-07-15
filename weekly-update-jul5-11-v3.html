@@ -63,10 +63,8 @@ a:hover{text-decoration:underline}
 .card-body ul{padding-left:18px;margin:4px 0 0}
 .card-body li{margin-bottom:3px}
 .card-body strong{color:var(--text);font-weight:600}
-.next-step{margin-top:8px;font-size:13px;color:var(--text)}
-.next-step strong{font-weight:600}
-.note{margin-top:8px;font-size:13px;color:var(--text2)}
-.note strong{color:var(--text);font-weight:600}
+.field-row{margin-top:6px;font-size:13px;color:var(--text2);line-height:1.5}
+.field-label{color:var(--text);font-weight:600}
 .gallery{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;position:relative;padding:4px}
 .gallery .thumb{width:160px;height:107px;border-radius:6px;overflow:visible;position:relative;border:1px solid var(--border);background:#10131a;cursor:default;flex-shrink:0}
 .gallery .thumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;pointer-events:none}
@@ -108,17 +106,17 @@ const weeks = [
       items: [
         {
           name: "New IA Iteration",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1103",
           status: "In progress", statusClass: "progress",
           links: [
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1103" }
           ],
-          statusText: "The new IA is being implemented by Yimin, and we're addressing the smaller issues as they come up.",
-          body: [
-            "The consolidation of model details and the model playground are out of scope for this round",
+          update: "The new IA is being implemented by Yimin. Smaller issues are being addressed as they come up.",
+          details: [
+            "Model details consolidation and model playground are out of scope for this round",
             "Local resources and connected resources are out of scope for this round"
           ],
-          next: null,
-          note: null,
+          next: "Continue implementation and close out the smaller issues.",
           gallery: false
         }
       ]
@@ -130,48 +128,49 @@ const weeks = [
       items: [
         {
           name: "Create hosted agent page improvement",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1373",
           status: "In progress", statusClass: "progress",
           links: [
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1373" }
           ],
-          statusText: "",
-          body: [
+          update: "Reviewed the hosted agent page direction.",
+          details: [
             "Most users rarely interact with filters → move to the right so the cards stay more prominent",
             "Add another next-step CTA in the selected card to improve discoverability, while keeping the bottom CTA",
             "Limit the number of default cards and use \"view more\""
           ],
-          next: null,
-          note: null,
+          next: "Continue refining the page against the latest design direction.",
           gallery: true
         },
         {
           name: "Optimization",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1162",
           status: "In progress", statusClass: "progress",
           links: [
             { label: "Link to PRD", href: "#" },
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1162" }
           ],
-          statusText: "MVP implemented. Advanced config in design review",
-          body: [
+          update: "MVP implemented. Advanced config in design review.",
+          details: [
             "Customize/Set up optimization through copilot flow",
             "Select dataset (GHC generate, existing dataset, local dataset, <s>real traces is scoped out</s>)",
-            "Deploy flow (1 click deploy as new version vs customizable deploy page)"
+            "Deploy flow (1 click deploy as new version vs customizable deploy page)",
+            "Portal's latest design: need to review with PM team to define how much detail to cover"
           ],
-          next: null,
-          note: "Portal's latest design: need to review with PM team to define how much details we need to cover",
+          next: "Review portal design with PM and confirm scope.",
           gallery: true
         },
         {
           name: "GitHub Copilot App Canvas MVP",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1404",
           status: "In progress", statusClass: "progress",
           links: [
             { label: "Prototype link", href: "#" },
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1404" }
           ],
-          statusText: "Design in implementation/iteration",
-          body: [],
-          next: null,
-          note: null,
+          update: "Design in implementation/iteration.",
+          details: [],
+          next: "Keep iterating the MVP direction and capture follow-up decisions.",
           gallery: true
         }
       ]
@@ -183,37 +182,39 @@ const weeks = [
       items: [
         {
           name: "Create agent main page improvement",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1374",
           status: "In progress", statusClass: "progress",
           links: [
             { label: "See full analysis", href: "#" },
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1374" }
           ],
-          statusText: "Consolidated feedbacks & created initial short term proposals",
-          body: [],
-          next: "think out of the box and embed these options in the actual step. Competitor analysis",
-          note: "Short term proposal:",
+          update: "Consolidated feedbacks & created initial short term proposals.",
+          details: [],
+          next: "Think out of the box and embed these options in the actual step. Competitor analysis.",
           gallery: true
         },
         {
-          name: "Managed agent/Toolbox in prompt agent",
+          name: "Toolbox in prompt agent",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1439",
           status: "Waiting", statusClass: "warn",
-          links: [],
-          statusText: "Waiting for latest design from portal",
-          body: [],
-          next: null,
-          note: null,
+          links: [
+            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1439" }
+          ],
+          update: "Waiting for latest design from portal.",
+          details: [],
+          next: "Review the portal update and continue once the design is available.",
           gallery: false
         },
         {
           name: "Auth redesign - agent user impersonation",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1405",
           status: "Kickoff", statusClass: "kickoff",
           links: [
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1405" }
           ],
-          statusText: "",
-          body: [],
-          next: null,
-          note: null,
+          update: "Kickoff phase.",
+          details: [],
+          next: "Define the initial direction and align the first design pass.",
           gallery: false
         }
       ]
@@ -225,36 +226,33 @@ const weeks = [
       items: [
         {
           name: "Region availability iteration",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1118",
           status: "On pause", statusClass: "pause",
           links: [
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1118" }
           ],
-          statusText: "Waiting for API from Dan to proceed",
-          body: [],
-          next: null,
-          note: null,
+          update: "Waiting for API from Dan to proceed.",
+          details: [],
+          next: "Resume once the API dependency is available.",
           gallery: false
         }
       ]
     },
 
     {
-      heading: "Fluent --> VSCode",
+      heading: "Fluent → VSCode",
       emoji: "⭐",
       items: [
         {
-          name: null,
-          status: null, statusClass: null,
-          links: [],
-          statusText: null,
-          body: [
-            "<strong>Merged all components this week! 1.1.0</strong>",
-            "Continuing to make minor improvements.",
-            "Next step: give the eng team a quick walkthrough of the available components.",
-            "Next step is to have Kham help replace some of the current components in production."
+          name: "Design System: VS Code Extension",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1351",
+          status: "Active", statusClass: "progress",
+          links: [
+            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1351" }
           ],
-          next: null,
-          note: null,
+          update: "Merged all components this week! 1.1.0. Continuing minor improvements.",
+          details: [],
+          next: "Give the eng team a quick walkthrough of available components. Have Kham help replace current components in production.",
           gallery: false
         }
       ]
@@ -268,73 +266,8 @@ const weeks = [
     "Long running task support",
     "Guardrails",
     "Activity protocol??",
+    "Managed agent",
     "Voice Live (Leo will follow up with portal PM)"
-  ],
-
-  // one draft per feature — name should match the item name above
-  drafts: [
-    {
-      name: "New IA iteration",
-      text: `Status: In progress.
-Update: The new IA is being implemented by Yimin. Smaller issues are being addressed as they come up.
-Scope: Model details consolidation, model playground, local resources, and connected resources are all out of scope for this round.
-Next step: Continue implementation and close out the smaller issues.`
-    },
-    {
-      name: "Create hosted agent page improvement",
-      text: `Status: In progress.
-Update: Reviewed the hosted agent page direction.
-Key decisions:
-- Move filters to the right so cards stay more prominent.
-- Add another next-step CTA in the selected card to improve discoverability while keeping the bottom CTA.
-- Limit the number of default cards and use "view more".
-Next step: Continue refining the page against the latest design direction.`
-    },
-    {
-      name: "Optimization / Agent Optimization",
-      text: `Status: MVP implemented. Advanced config in design review.
-Key decisions:
-- Customize/set up optimization through the copilot flow.
-- Select dataset: GHC generate, existing dataset, local dataset. Real traces scoped out.
-- Deploy flow: 1-click deploy as new version vs customizable deploy page.
-Portal's latest design: need to review with PM team to define how much detail to cover.
-Next step: Review portal design with PM and confirm scope.`
-    },
-    {
-      name: "GitHub Copilot App Canvas MVP",
-      text: `Status: Design in implementation/iteration.
-Update: Continued design work on the App Canvas MVP.
-Next step: Keep iterating the MVP direction and capture follow-up decisions.`
-    },
-    {
-      name: "Create agent main page improvement",
-      text: `Status: Consolidated feedbacks and created initial short term proposals.
-Short term proposal: Bring the current entry options into the actual step.
-Next step: Think out of the box and embed these options in the actual step. Competitor analysis.`
-    },
-    {
-      name: "Managed agent/Toolbox in prompt agent",
-      text: `Status: Waiting for latest design from portal.
-Next step: Review the portal update and continue once the design is available.`
-    },
-    {
-      name: "Auth redesign - agent user impersonation",
-      text: `Status: Kickoff.
-Next step: Define the initial direction and align the first design pass.`
-    },
-    {
-      name: "Region availability iteration",
-      text: `Status: On pause. Waiting for API from Dan to proceed.
-Next step: Resume once the API dependency is available.`
-    },
-    {
-      name: "Fluent --> VSCode",
-      text: `Status: Active.
-Update: Merged all components this week in 1.1.0. Continuing minor improvements.
-Next steps:
-- Give the eng team a quick walkthrough of the available components.
-- Have Kham help replace some of the current components in production.`
-    }
   ]
   },
   // ── Copy above block and paste here for a new week ──
@@ -365,16 +298,16 @@ function render() {
         html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
       }
       if (item.status) {
-        html += `<div class="status-line"><span class="status-tag ${item.statusClass}">${esc(item.status)}</span>${item.statusText ? esc(item.statusText) : ""}</div>`;
+        html += `<div class="status-line"><span class="status-tag ${item.statusClass}">${esc(item.status)}</span></div>`;
       }
-      if (item.note) {
-        html += `<div class="note"><strong>${item.note}</strong></div>`;
+      if (item.update) {
+        html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
       }
-      if (item.body.length) {
-        html += `<div class="card-body"><ul>${item.body.map(b => `<li>${b}</li>`).join("")}</ul></div>`;
+      if (item.details && item.details.length) {
+        html += `<div class="card-body"><ul>${item.details.map(b => `<li>${b}</li>`).join("")}</ul></div>`;
       }
       if (item.next) {
-        html += `<div class="next-step"><strong>Next step:</strong> ${esc(item.next)}</div>`;
+        html += `<div class="field-row"><span class="field-label">Next step:</span> ${esc(item.next)}</div>`;
       }
       if (item.gallery) {
         html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
@@ -389,14 +322,7 @@ function render() {
     html += `<div class="section"><div class="section-head">Backlog</div><div class="card"><ul class="backlog-list">${report.backlog.map(b => `<li>${esc(b)}</li>`).join("")}</ul></div></div>`;
   }
 
-  // drafts
-  if (report.drafts.length) {
-    html += `<div class="section"><div class="section-head">GitHub Comment Drafts</div>`;
-    report.drafts.forEach((d) => {
-      html += `<details><summary>${esc(d.name)}</summary><pre>${esc(d.text)}</pre></details>`;
-    });
-    html += `</div>`;
-  }
+
 
   app.innerHTML = html;
   document.querySelectorAll("[data-gallery]").forEach(initGallery);
