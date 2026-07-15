@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Amy - Jul 5-11, 2026</title>
+<title>Amy - Weekly Design Updates</title>
 <style>
 *{box-sizing:border-box;margin:0}
 :root{
@@ -23,6 +23,8 @@ a:hover{text-decoration:underline}
 .header{text-align:center;padding:18px 0 12px;border-bottom:1px solid var(--border);margin-bottom:20px}
 .header h1{font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
 .header .date{font-size:12px;color:var(--text2);margin-top:2px}
+.week-select{margin-top:8px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;outline:none}
+.week-select:focus{border-color:var(--link)}
 .section{margin-bottom:24px}
 .section-head{font-size:15px;font-weight:700;color:var(--text);padding:0 0 8px;margin-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .section-head .emoji{font-size:14px}
@@ -90,10 +92,12 @@ pre{padding:12px;font:12px/1.5 "SF Mono",Consolas,monospace;color:var(--text2);w
 
 <script>
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  WEEKLY DATA — edit this block each week, then save + refresh  ║
+// ║  WEEKLY DATA — add new weeks to the top of this array         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const report = {
+const weeks = [
+  // ── Week 1: Jul 5-11 ──
+  {
   title: "Amy Weekly Design Update",
   date: "Jul 5 - Jul 11, 2026",
 
@@ -332,7 +336,11 @@ Next steps:
 - Have Kham help replace some of the current components in production.`
     }
   ]
-};
+  },
+  // ── Copy above block and paste here for a new week ──
+];
+
+let report = weeks[0];
 
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  RENDERER — you should not need to edit below this line      ║
@@ -342,8 +350,9 @@ function render() {
   const app = document.getElementById("app");
   let html = "";
 
-  // header
-  html += `<div class="header"><h1>${report.title}</h1><div class="date">${report.date}</div></div>`;
+  // header with week selector
+  const options = weeks.map((w, i) => `<option value="${i}"${w === report ? ' selected' : ''}>${esc(w.date)}</option>`).join("");
+  html += `<div class="header"><h1>${report.title}</h1><select class="week-select" id="week-select">${options}</select></div>`;
 
   // sections
   report.sections.forEach((sec) => {
@@ -448,6 +457,14 @@ function addThumb(container, file) {
 }
 
 render();
+
+// week selector
+document.addEventListener("change", (e) => {
+  if (e.target.id === "week-select") {
+    report = weeks[+e.target.value];
+    render();
+  }
+});
 
 // ── inline link editing ──
 
