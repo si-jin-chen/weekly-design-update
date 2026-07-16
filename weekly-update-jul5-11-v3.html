@@ -101,13 +101,13 @@ const weeks = [
 
   sections: [
     {
-      heading: "Smaller items",
+      heading: "Fit and finish",
       emoji: "⭐",
       items: [
         {
           name: "New IA Iteration",
           issue: "https://github.com/coreai-microsoft/caidr/issues/1103",
-          status: "In progress", statusClass: "progress",
+          status: "Fit and finish", statusClass: "done",
           links: [
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1103" }
           ],
@@ -118,34 +118,11 @@ const weeks = [
           ],
           next: "Continue implementation and close out the smaller issues.",
           gallery: false
-        }
-      ]
-    },
-
-    {
-      heading: "Features",
-      emoji: "⭐",
-      items: [
-        {
-          name: "Create hosted agent page improvement",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1373",
-          status: "In progress", statusClass: "progress",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1373" }
-          ],
-          update: "Reviewed the hosted agent page direction.",
-          details: [
-            "Most users rarely interact with filters → move to the right so the cards stay more prominent",
-            "Add another next-step CTA in the selected card to improve discoverability, while keeping the bottom CTA",
-            "Limit the number of default cards and use \"view more\""
-          ],
-          next: "Continue refining the page against the latest design direction.",
-          gallery: true
         },
         {
           name: "Optimization",
           issue: "https://github.com/coreai-microsoft/caidr/issues/1162",
-          status: "In progress", statusClass: "progress",
+          status: "Fit and finish", statusClass: "done",
           links: [
             { label: "Link to PRD", href: "#" },
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1162" }
@@ -163,7 +140,7 @@ const weeks = [
         {
           name: "GitHub Copilot App Canvas MVP",
           issue: "https://github.com/coreai-microsoft/caidr/issues/1404",
-          status: "In progress", statusClass: "progress",
+          status: "Fit and finish", statusClass: "done",
           links: [
             { label: "Prototype link", href: "#" },
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1404" }
@@ -181,9 +158,25 @@ const weeks = [
       emoji: "⭐",
       items: [
         {
+          name: "Create hosted agent page improvement",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1373",
+          status: "Iteration", statusClass: "progress",
+          links: [
+            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1373" }
+          ],
+          update: "Reviewed the hosted agent page direction.",
+          details: [
+            "Most users rarely interact with filters → move to the right so the cards stay more prominent",
+            "Add another next-step CTA in the selected card to improve discoverability, while keeping the bottom CTA",
+            "Limit the number of default cards and use \"view more\""
+          ],
+          next: "Continue refining the page against the latest design direction.",
+          gallery: true
+        },
+        {
           name: "Create agent main page improvement",
           issue: "https://github.com/coreai-microsoft/caidr/issues/1374",
-          status: "In progress", statusClass: "progress",
+          status: "Early exploration", statusClass: "kickoff",
           links: [
             { label: "See full analysis", href: "#" },
             { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1374" }
@@ -192,18 +185,6 @@ const weeks = [
           details: [],
           next: "Think out of the box and embed these options in the actual step. Competitor analysis.",
           gallery: true
-        },
-        {
-          name: "Toolbox in prompt agent",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1439",
-          status: "Waiting", statusClass: "warn",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1439" }
-          ],
-          update: "Waiting for latest design from portal.",
-          details: [],
-          next: "Review the portal update and continue once the design is available.",
-          gallery: false
         },
         {
           name: "Auth redesign - agent user impersonation",
@@ -224,6 +205,18 @@ const weeks = [
       heading: "On pause",
       emoji: "⭐",
       items: [
+        {
+          name: "Toolbox in prompt agent",
+          issue: "https://github.com/coreai-microsoft/caidr/issues/1439",
+          status: "On pause", statusClass: "pause",
+          links: [
+            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1439" }
+          ],
+          update: "Waiting for latest design from portal.",
+          details: [],
+          next: "Review the portal update and continue once the design is available.",
+          gallery: false
+        },
         {
           name: "Region availability iteration",
           issue: "https://github.com/coreai-microsoft/caidr/issues/1118",
