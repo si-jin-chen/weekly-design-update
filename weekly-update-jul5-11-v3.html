@@ -871,14 +871,19 @@
           });
           input.click();
         });
-        // x button to remove entire drop zone
+        // x button to hide the drop zone UI (+ and × buttons) but keep screenshots
         const closeBtn = document.createElement("button");
         closeBtn.className = "close-gallery";
         closeBtn.textContent = "\u00d7";
-        closeBtn.title = "Remove screenshot area";
+        closeBtn.title = "Hide drop zone";
         closeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          container.style.display = "none";
+          addBtn.style.display = "none";
+          closeBtn.style.display = "none";
+          // If no screenshots remain, hide the whole container
+          if (!container.querySelector(".thumb")) {
+            container.style.display = "none";
+          }
           const hidden = getHiddenGalleries();
           const key = container.dataset.gallery;
           if (!hidden.includes(key)) { hidden.push(key); setHiddenGalleries(hidden); }
@@ -911,16 +916,19 @@
             .filter((f) => f.type.startsWith("image/"))
             .forEach((f) => addThumb(container, f));
         });
-        // skip if user previously closed this gallery
+        // check if user previously closed this gallery's editing UI
         const hiddenList = getHiddenGalleries();
-        if (hiddenList.includes(container.dataset.gallery)) {
-          container.style.display = "none";
-          return;
-        }
-        // restore saved screenshots
+        const isHidden = hiddenList.includes(container.dataset.gallery);
+        // restore saved screenshots (even if editing UI is hidden)
         const saved = loadScreenshots()[container.dataset.gallery];
         if (saved && saved.length) {
           container.style.display = "flex";
+          if (isHidden) { addBtn.style.display = "none"; closeBtn.style.display = "none"; }
+        } else if (isHidden) {
+          container.style.display = "none";
+          return;
+        }
+        if (saved && saved.length) {
           saved.forEach((item) => {
             // Support both old format (string) and new format ({src, width, height})
             const src = typeof item === "string" ? item : item.src;
