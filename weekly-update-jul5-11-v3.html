@@ -338,6 +338,11 @@
         position: relative;
         padding: 4px;
       }
+      .gallery.drag-over-gallery {
+        background: rgba(127, 184, 255, 0.05);
+        border: 1px dashed var(--link);
+        border-radius: 8px;
+      }
       .gallery .thumb {
         width: 160px;
         height: 107px;
@@ -855,9 +860,26 @@
         });
         container.appendChild(closeBtn);
         // drag-drop on the whole gallery area
-        container.addEventListener("dragover", (e) => e.preventDefault());
+        container.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          if (document._draggingThumb) container.classList.add("drag-over-gallery");
+        });
+        container.addEventListener("dragleave", (e) => {
+          if (!container.contains(e.relatedTarget)) container.classList.remove("drag-over-gallery");
+        });
         container.addEventListener("drop", (e) => {
           e.preventDefault();
+          container.classList.remove("drag-over-gallery");
+          // Handle cross-gallery thumb move
+          const dragging = document._draggingThumb;
+          if (dragging && !e.target.closest(".thumb")) {
+            const addBtn = container.querySelector(".add-btn");
+            if (addBtn) container.insertBefore(dragging, addBtn);
+            else container.appendChild(dragging);
+            saveScreenshots();
+            return;
+          }
+          // Handle file drops
           [...e.dataTransfer.files]
             .filter((f) => f.type.startsWith("image/"))
             .forEach((f) => addThumb(container, f));
@@ -899,16 +921,19 @@
           thumb.classList.add("dragging");
           e.dataTransfer.effectAllowed = "move";
           e.dataTransfer.setData("text/plain", "");
+          document._draggingThumb = thumb;
         });
         thumb.addEventListener("dragend", () => {
           thumb.classList.remove("dragging");
-          container.querySelectorAll(".thumb").forEach(t => t.classList.remove("drag-over"));
+          document.querySelectorAll(".thumb.drag-over").forEach(t => t.classList.remove("drag-over"));
+          document.querySelectorAll(".gallery.drag-over-gallery").forEach(g => g.classList.remove("drag-over-gallery"));
+          document._draggingThumb = null;
           saveScreenshots();
         });
         thumb.addEventListener("dragover", (e) => {
           e.preventDefault();
           e.dataTransfer.dropEffect = "move";
-          const dragging = container.querySelector(".dragging");
+          const dragging = document._draggingThumb;
           if (dragging && dragging !== thumb) thumb.classList.add("drag-over");
         });
         thumb.addEventListener("dragleave", () => thumb.classList.remove("drag-over"));
@@ -916,13 +941,10 @@
           e.preventDefault();
           e.stopPropagation();
           thumb.classList.remove("drag-over");
-          const dragging = container.querySelector(".dragging");
+          const dragging = document._draggingThumb;
           if (dragging && dragging !== thumb) {
-            const thumbs = [...container.querySelectorAll(".thumb")];
-            const fromIdx = thumbs.indexOf(dragging);
-            const toIdx = thumbs.indexOf(thumb);
-            if (fromIdx < toIdx) thumb.after(dragging);
-            else container.insertBefore(dragging, thumb);
+            // Move to this thumb's position (works across galleries)
+            thumb.parentElement.insertBefore(dragging, thumb);
           }
         });
         // drag-to-resize handle
