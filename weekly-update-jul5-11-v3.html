@@ -758,7 +758,7 @@
               `<option value="${i}"${w === report ? " selected" : ""}>${esc(w.date)}</option>`,
           )
           .join("");
-        html += `<div class="header"><h1>${report.title}</h1><select class="week-select" id="week-select">${options}</select></div>`;
+        html += `<div class="header"><h1>${report.title}</h1><div style="display:flex;gap:8px;align-items:center"><select class="week-select" id="week-select">${options}</select><button id="export-btn" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer" title="Export screenshots for GitHub posting">💾 Export</button></div></div>`;
 
         // sections
         report.sections.forEach((sec) => {
@@ -1221,6 +1221,19 @@
           };
           reader.readAsDataURL(blob);
         });
+      });
+
+      // Export screenshots as JSON file for GitHub posting
+      document.addEventListener("click", (e) => {
+        if (e.target.id !== "export-btn") return;
+        const data = loadScreenshots();
+        if (!Object.keys(data).length) { alert("No screenshots to export."); return; }
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "screenshots.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
       });
     </script>
   </body>
