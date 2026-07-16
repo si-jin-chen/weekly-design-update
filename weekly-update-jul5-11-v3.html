@@ -324,6 +324,19 @@ function render() {
 
 function esc(s) { if (!s) return ""; const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
+// ── localStorage persistence for screenshots ──
+const STORAGE_KEY = "weekly-report-screenshots";
+function loadScreenshots() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; } }
+function saveScreenshots() {
+  const data = {};
+  document.querySelectorAll("[data-gallery]").forEach(g => {
+    const key = g.dataset.gallery;
+    const imgs = [...g.querySelectorAll(".thumb img")].map(img => img.src);
+    if (imgs.length) data[key] = imgs;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
 // gallery: add, remove, resize, drag-drop
 function initGallery(container) {
   if (container.dataset.initialized) return;
@@ -347,13 +360,23 @@ function initGallery(container) {
   // drag-drop on the whole gallery area
   container.addEventListener("dragover", e => e.preventDefault());
   container.addEventListener("drop", e => { e.preventDefault(); [...e.dataTransfer.files].filter(f => f.type.startsWith("image/")).forEach(f => addThumb(container, f)); });
+  // restore saved screenshots
+  const saved = loadScreenshots()[container.dataset.gallery];
+  if (saved && saved.length) {
+    container.style.display = "flex";
+    saved.forEach(src => addThumbFromSrc(container, src));
+  }
 }
 function addThumb(container, file) {
-  const closeBtn = container.querySelector(".close-gallery");
+  const reader = new FileReader();
+  reader.onload = () => { addThumbFromSrc(container, reader.result); saveScreenshots(); };
+  reader.readAsDataURL(file);
+}
+function addThumbFromSrc(container, src) {
   const thumb = document.createElement("div"); thumb.className = "thumb";
-  const img = document.createElement("img"); img.src = URL.createObjectURL(file); thumb.appendChild(img);
+  const img = document.createElement("img"); img.src = src; thumb.appendChild(img);
   const rm = document.createElement("span"); rm.className = "remove"; rm.textContent = "×";
-  rm.addEventListener("click", e => { e.stopPropagation(); thumb.remove(); }); thumb.appendChild(rm);
+  rm.addEventListener("click", e => { e.stopPropagation(); thumb.remove(); saveScreenshots(); }); thumb.appendChild(rm);
   // drag-to-resize handle
   const handle = document.createElement("div"); handle.className = "resize-handle";
   thumb.appendChild(handle);
