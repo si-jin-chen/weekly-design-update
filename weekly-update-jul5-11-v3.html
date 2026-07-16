@@ -1,476 +1,1039 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Amy - Weekly Design Updates</title>
-<style>
-*{box-sizing:border-box;margin:0}
-:root{
-  --bg:#13161c;--surface:#1e2128;--border:#2e323a;--border-h:#3a3f4a;
-  --text:#cdd1d8;--text2:#8b919c;--text3:#5c6270;
-  --link:#7fb8ff;--accent:#a78bfa;
-  --success:#6ee7b7;--warn:#fbbf24;--danger:#fb7185;--pause:#8b919c;
-}
-body{
-  font:14px/1.6 "Inter","Segoe UI Variable","Segoe UI",-apple-system,sans-serif;
-  background:var(--bg);color:var(--text);
-  -webkit-font-smoothing:antialiased;
-}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline}
-.board{max-width:740px;margin:0 auto;padding:16px 12px 32px}
-.header{text-align:center;padding:18px 0 12px;border-bottom:1px solid var(--border);margin-bottom:20px}
-.header h1{font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
-.header .date{font-size:12px;color:var(--text2);margin-top:2px}
-.week-select{margin-top:8px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;outline:none}
-.week-select:focus{border-color:var(--link)}
-.section{margin-bottom:24px}
-.section-head{font-size:15px;font-weight:700;color:var(--text);padding:0 0 8px;margin-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.section-head .emoji{font-size:14px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
-.card:hover{border-color:var(--border-h)}
-.card.paste-target{border-color:var(--link);box-shadow:0 0 0 1px var(--link)}
-.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
-.card-title{font-size:14px;font-weight:600;color:var(--text)}
-.card-links{display:flex;gap:8px;font-size:12px;color:var(--text2);flex-shrink:0;flex-wrap:wrap;align-items:center}
-.card-links a{color:var(--link);font-size:12px;cursor:pointer}
-.card-links a.placeholder{color:var(--text3);border-bottom:1px dashed var(--text3)}
-.card-links .edit-link{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:0 2px;vertical-align:middle}
-.card-links .edit-link:hover{color:var(--link)}
-.card-links .add-link{width:18px;height:18px;border-radius:50%;border:1px dashed var(--text3);background:transparent;color:var(--text3);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;position:relative}
-.card-links .add-link:hover{border-color:var(--link);color:var(--link)}
-.add-menu{position:absolute;top:100%;right:0;margin-top:4px;background:var(--surface);border:1px solid var(--border-h);border-radius:6px;padding:4px 0;z-index:50;min-width:140px;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.add-menu button{display:block;width:100%;text-align:left;padding:6px 12px;border:none;background:none;color:var(--text);font-size:12px;cursor:pointer}
-.add-menu button:hover{background:rgba(127,184,255,.1)}
-.link-edit-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100}
-.link-edit-box{background:var(--surface);border:1px solid var(--border-h);border-radius:10px;padding:16px;width:360px;max-width:90vw}
-.link-edit-box h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px}
-.link-edit-box label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px}
-.link-edit-box input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:13px;margin-bottom:10px;outline:none}
-.link-edit-box input:focus{border-color:var(--link)}
-.link-edit-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
-.link-edit-actions button{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer}
-.link-edit-actions button.primary{background:var(--link);color:#13161c;border-color:var(--link)}
-.link-edit-actions button.danger{color:var(--danger);border-color:var(--danger)}
-.status-line{font-size:13px;color:var(--text2);margin-top:4px}
-.status-tag{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:3px;margin-right:6px;vertical-align:1px}
-.status-tag.progress{background:rgba(127,184,255,.1);color:var(--link)}
-.status-tag.done{background:rgba(110,231,183,.12);color:var(--success)}
-.status-tag.pause{background:rgba(139,145,156,.12);color:var(--pause)}
-.status-tag.warn{background:rgba(251,191,36,.1);color:var(--warn)}
-.status-tag.kickoff{background:rgba(167,139,250,.1);color:var(--accent)}
-.card-body{margin-top:8px;font-size:13px;color:var(--text2)}
-.card-body ul{padding-left:18px;margin:4px 0 0}
-.card-body li{margin-bottom:3px}
-.card-body strong{color:var(--text);font-weight:600}
-.field-row{margin-top:6px;font-size:13px;color:var(--text2);line-height:1.5}
-.field-label{color:var(--text);font-weight:600}
-.gallery{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;position:relative;padding:4px}
-.gallery .thumb{width:160px;height:107px;border-radius:6px;overflow:visible;position:relative;border:1px solid var(--border);background:#10131a;cursor:default;flex-shrink:0}
-.gallery .thumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;cursor:pointer}
-.lightbox{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:200;cursor:zoom-out}
-.lightbox img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
-.gallery .thumb .remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:11px;line-height:18px;text-align:center;cursor:pointer;display:none;z-index:2}
-.gallery .thumb:hover .remove{display:block}
-.gallery .thumb .resize-handle{position:absolute;bottom:0;right:0;width:14px;height:14px;cursor:nwse-resize;z-index:2;opacity:0}
-.gallery .thumb:hover .resize-handle{opacity:1}
-.gallery .thumb .resize-handle::after{content:'';position:absolute;bottom:2px;right:2px;width:8px;height:8px;border-right:2px solid rgba(255,255,255,.5);border-bottom:2px solid rgba(255,255,255,.5)}
-.gallery .add-btn{width:120px;height:80px;border-radius:6px;border:1px dashed var(--border);background:transparent;color:var(--text3);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.gallery .add-btn:hover{border-color:var(--border-h);color:var(--text2)}
-.gallery .close-gallery{position:relative;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;display:none;border:none;padding:0;flex-shrink:0;align-self:center}
-.gallery:hover .close-gallery{display:flex;align-items:center;justify-content:center}
-details{border:1px solid var(--border);border-radius:8px;margin-bottom:6px;overflow:hidden}
-summary{padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);cursor:pointer;list-style:none}
-summary::-webkit-details-marker{display:none}
-pre{padding:12px;font:12px/1.5 "SF Mono",Consolas,monospace;color:var(--text2);white-space:pre-wrap;background:var(--bg);margin:0}
-.backlog-list{font-size:13px;color:var(--text2);padding-left:18px}
-.backlog-list li{margin-bottom:3px}
-</style>
-</head>
-<body>
-<main class="board" id="app"></main>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Amy - Weekly Design Updates</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      :root {
+        --bg: #13161c;
+        --surface: #1e2128;
+        --border: #2e323a;
+        --border-h: #3a3f4a;
+        --text: #cdd1d8;
+        --text2: #8b919c;
+        --text3: #5c6270;
+        --link: #7fb8ff;
+        --accent: #a78bfa;
+        --success: #6ee7b7;
+        --warn: #fbbf24;
+        --danger: #fb7185;
+        --pause: #8b919c;
+      }
+      body {
+        font:
+          14px/1.6 "Inter",
+          "Segoe UI Variable",
+          "Segoe UI",
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .board {
+        max-width: 740px;
+        margin: 0 auto;
+        padding: 16px 12px 32px;
+      }
+      .header {
+        text-align: center;
+        padding: 18px 0 12px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+      .header .date {
+        font-size: 12px;
+        color: var(--text2);
+        margin-top: 2px;
+      }
+      .week-select {
+        margin-top: 8px;
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--surface);
+        color: var(--text);
+        font-size: 13px;
+        cursor: pointer;
+        outline: none;
+      }
+      .week-select:focus {
+        border-color: var(--link);
+      }
+      .section {
+        margin-bottom: 24px;
+      }
+      .section-head {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        padding: 0 0 8px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .section-head .emoji {
+        font-size: 14px;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+      }
+      .card:hover {
+        border-color: var(--border-h);
+      }
+      .card.paste-target {
+        border-color: var(--link);
+        box-shadow: 0 0 0 1px var(--link);
+      }
+      .card-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .card-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .card-links {
+        display: flex;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text2);
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .card-links a {
+        color: var(--link);
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .card-links a.placeholder {
+        color: var(--text3);
+        border-bottom: 1px dashed var(--text3);
+      }
+      .card-links .edit-link {
+        background: none;
+        border: none;
+        color: var(--text3);
+        font-size: 11px;
+        cursor: pointer;
+        padding: 0 2px;
+        vertical-align: middle;
+      }
+      .card-links .edit-link:hover {
+        color: var(--link);
+      }
+      .card-links .add-link {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px dashed var(--text3);
+        background: transparent;
+        color: var(--text3);
+        font-size: 13px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        flex-shrink: 0;
+        position: relative;
+      }
+      .card-links .add-link:hover {
+        border-color: var(--link);
+        color: var(--link);
+      }
+      .add-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 4px;
+        background: var(--surface);
+        border: 1px solid var(--border-h);
+        border-radius: 6px;
+        padding: 4px 0;
+        z-index: 50;
+        min-width: 140px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+      .add-menu button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 6px 12px;
+        border: none;
+        background: none;
+        color: var(--text);
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .add-menu button:hover {
+        background: rgba(127, 184, 255, 0.1);
+      }
+      .link-edit-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+      .link-edit-box {
+        background: var(--surface);
+        border: 1px solid var(--border-h);
+        border-radius: 10px;
+        padding: 16px;
+        width: 360px;
+        max-width: 90vw;
+      }
+      .link-edit-box h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 12px;
+      }
+      .link-edit-box label {
+        display: block;
+        font-size: 12px;
+        color: var(--text2);
+        margin-bottom: 4px;
+      }
+      .link-edit-box input {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 13px;
+        margin-bottom: 10px;
+        outline: none;
+      }
+      .link-edit-box input:focus {
+        border-color: var(--link);
+      }
+      .link-edit-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 4px;
+      }
+      .link-edit-actions button {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .link-edit-actions button.primary {
+        background: var(--link);
+        color: #13161c;
+        border-color: var(--link);
+      }
+      .link-edit-actions button.danger {
+        color: var(--danger);
+        border-color: var(--danger);
+      }
+      .status-line {
+        font-size: 13px;
+        color: var(--text2);
+        margin-top: 4px;
+      }
+      .status-tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-right: 6px;
+        vertical-align: 1px;
+      }
+      .status-tag.progress {
+        background: rgba(127, 184, 255, 0.1);
+        color: var(--link);
+      }
+      .status-tag.done {
+        background: rgba(110, 231, 183, 0.12);
+        color: var(--success);
+      }
+      .status-tag.pause {
+        background: rgba(139, 145, 156, 0.12);
+        color: var(--pause);
+      }
+      .status-tag.warn {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--warn);
+      }
+      .status-tag.kickoff {
+        background: rgba(167, 139, 250, 0.1);
+        color: var(--accent);
+      }
+      .card-body {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--text2);
+      }
+      .card-body ul {
+        padding-left: 18px;
+        margin: 4px 0 0;
+      }
+      .card-body li {
+        margin-bottom: 3px;
+      }
+      .card-body strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .field-row {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.5;
+      }
+      .field-label {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+        position: relative;
+        padding: 4px;
+      }
+      .gallery .thumb {
+        width: 160px;
+        height: 107px;
+        border-radius: 6px;
+        overflow: visible;
+        position: relative;
+        border: 1px solid var(--border);
+        background: #10131a;
+        cursor: default;
+        flex-shrink: 0;
+      }
+      .gallery .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        cursor: zoom-out;
+      }
+      .lightbox img {
+        max-width: 90vw;
+        max-height: 90vh;
+        border-radius: 8px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+      }
+      .gallery .thumb .remove {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        font-size: 11px;
+        line-height: 18px;
+        text-align: center;
+        cursor: pointer;
+        display: none;
+        z-index: 2;
+      }
+      .gallery .thumb:hover .remove {
+        display: block;
+      }
+      .gallery .thumb.dragging {
+        opacity: 0.4;
+      }
+      .gallery .thumb.drag-over {
+        border-color: var(--link);
+        box-shadow: 0 0 0 2px var(--link);
+      }
+      .gallery .thumb .resize-handle {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 14px;
+        height: 14px;
+        cursor: nwse-resize;
+        z-index: 2;
+        opacity: 0;
+      }
+      .gallery .thumb:hover .resize-handle {
+        opacity: 1;
+      }
+      .gallery .thumb .resize-handle::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid rgba(255, 255, 255, 0.5);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+      }
+      .gallery .add-btn {
+        width: 120px;
+        height: 80px;
+        border-radius: 6px;
+        border: 1px dashed var(--border);
+        background: transparent;
+        color: var(--text3);
+        font-size: 22px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .gallery .add-btn:hover {
+        border-color: var(--border-h);
+        color: var(--text2);
+      }
+      .gallery .close-gallery {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+        display: none;
+        border: none;
+        padding: 0;
+        flex-shrink: 0;
+        align-self: center;
+      }
+      .gallery:hover .close-gallery {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      details {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 6px;
+        overflow: hidden;
+      }
+      summary {
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        background: var(--surface);
+        cursor: pointer;
+        list-style: none;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      pre {
+        padding: 12px;
+        font:
+          12px/1.5 "SF Mono",
+          Consolas,
+          monospace;
+        color: var(--text2);
+        white-space: pre-wrap;
+        background: var(--bg);
+        margin: 0;
+      }
+      .backlog-list {
+        font-size: 13px;
+        color: var(--text2);
+        padding-left: 18px;
+      }
+      .backlog-list li {
+        margin-bottom: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="board" id="app"></main>
 
-<script>
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  WEEKLY DATA — add new weeks to the top of this array         ║
-// ╚══════════════════════════════════════════════════════════════╝
+    <script>
+      // ╔══════════════════════════════════════════════════════════════╗
+      // ║  WEEKLY DATA — add new weeks to the top of this array         ║
+      // ╚══════════════════════════════════════════════════════════════╝
 
-const weeks = [
-  // ── Week 1: Jul 5-11 ──
-  {
-  title: "Amy Weekly Design Update",
-  date: "Jul 5 - Jul 11, 2026",
-
-  sections: [
-    {
-      heading: "Fit and finish",
-      emoji: "⭐",
-      items: [
+      const weeks = [
+        // ── Week 1: Jul 5-11 ──
         {
-          name: "New IA Iteration",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1103",
-          status: "Fit and finish", statusClass: "done",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1103" }
+          title: "Amy Weekly Design Update",
+          date: "Jul 5 - Jul 11, 2026",
+
+          sections: [
+            {
+              heading: "Fit and finish",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "New IA Iteration",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1103",
+                  status: "Fit and finish",
+                  statusClass: "done",
+                  links: [
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1103",
+                    },
+                  ],
+                  update:
+                    "The new IA is being implemented by Yimin. Smaller issues are being addressed as they come up.",
+                  details: [
+                    "Model details consolidation and model playground are out of scope for this round",
+                    "Local resources and connected resources are out of scope for this round",
+                  ],
+                  next: "Continue implementation and close out the smaller issues.",
+                  gallery: false,
+                },
+                {
+                  name: "Optimization",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1162",
+                  status: "Fit and finish",
+                  statusClass: "done",
+                  links: [
+                    { label: "Link to PRD", href: "#" },
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1162",
+                    },
+                  ],
+                  update: "MVP implemented. Advanced config in design review.",
+                  details: [
+                    "Customize/Set up optimization through copilot flow",
+                    "Select dataset (GHC generate, existing dataset, local dataset, <s>real traces is scoped out</s>)",
+                    "Deploy flow (1 click deploy as new version vs customizable deploy page)",
+                  ],
+                  next: "Review portal design with PM and confirm scope.",
+                  gallery: true,
+                },
+                {
+                  name: "GitHub Copilot App Canvas MVP",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1404",
+                  status: "Fit and finish",
+                  statusClass: "done",
+                  links: [
+                    { label: "Prototype link", href: "#" },
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1404",
+                    },
+                  ],
+                  update: "Design in implementation/iteration.",
+                  details: [],
+                  next: "Keep iterating the MVP direction and capture follow-up decisions.",
+                  gallery: true,
+                },
+              ],
+            },
+
+            {
+              heading: "Work in progress",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "Create hosted agent page improvement",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1373",
+                  status: "Iteration",
+                  statusClass: "progress",
+                  links: [
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1373",
+                    },
+                  ],
+                  update: "Reviewed the hosted agent page direction.",
+                  details: [
+                    "Most users rarely interact with filters → move to the right so the cards stay more prominent",
+                    "Add another next-step CTA in the selected card to improve discoverability, while keeping the bottom CTA",
+                    'Limit the number of default cards and use "view more"',
+                  ],
+                  next: "Continue refining the page against the latest design direction.",
+                  gallery: true,
+                },
+                {
+                  name: "Create agent main page improvement",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1374",
+                  status: "Early exploration",
+                  statusClass: "kickoff",
+                  links: [
+                    { label: "See full analysis", href: "#" },
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1374",
+                    },
+                  ],
+                  update:
+                    "Consolidated feedbacks & created initial short term proposals.",
+                  details: [],
+                  next: "Think out of the box and embed these options in the actual step. Competitor analysis.",
+                  gallery: true,
+                },
+                {
+                  name: "Auth redesign - agent user impersonation",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1405",
+                  status: "Kickoff",
+                  statusClass: "kickoff",
+                  links: [
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1405",
+                    },
+                  ],
+                  update: "Kickoff phase.",
+                  details: [],
+                  next: "Define the initial direction and align the first design pass.",
+                  gallery: false,
+                },
+              ],
+            },
+
+            {
+              heading: "On pause",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "Toolbox in prompt agent",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1439",
+                  status: "On pause",
+                  statusClass: "pause",
+                  links: [
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1439",
+                    },
+                  ],
+                  update: "Waiting for latest design from portal.",
+                  details: [],
+                  next: "Review the portal update and continue once the design is available.",
+                  gallery: false,
+                },
+                {
+                  name: "Region availability iteration",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1118",
+                  status: "On pause",
+                  statusClass: "pause",
+                  links: [
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1118",
+                    },
+                  ],
+                  update: "Waiting for API from Dan to proceed.",
+                  details: [],
+                  next: "Resume once the API dependency is available.",
+                  gallery: false,
+                },
+              ],
+            },
+
+            {
+              heading: "Fluent → VSCode",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "Design System: VS Code Extension",
+                  issue:
+                    "https://github.com/coreai-microsoft/caidr/issues/1351",
+                  status: "Active",
+                  statusClass: "progress",
+                  links: [
+                    {
+                      label: "GitHub Issue",
+                      href: "https://github.com/coreai-microsoft/caidr/issues/1351",
+                    },
+                  ],
+                  update:
+                    "Merged all components this week! 1.1.0. Continuing minor improvements.",
+                  details: [],
+                  next: "Give the eng team a quick walkthrough of available components. Have Kham help replace current components in production.",
+                  gallery: false,
+                },
+              ],
+            },
           ],
-          update: "The new IA is being implemented by Yimin. Smaller issues are being addressed as they come up.",
-          details: [
-            "Model details consolidation and model playground are out of scope for this round",
-            "Local resources and connected resources are out of scope for this round"
+
+          backlog: [
+            "Minor - Main CTA for tool catalog when new features added",
+            "Agentic workflow",
+            "Telemetry we would like to track",
+            "Long running task support",
+            "Guardrails",
+            "Activity protocol??",
+            "Managed agent",
+            "Voice Live (Leo will follow up with portal PM)",
           ],
-          next: "Continue implementation and close out the smaller issues.",
-          gallery: false
         },
-        {
-          name: "Optimization",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1162",
-          status: "Fit and finish", statusClass: "done",
-          links: [
-            { label: "Link to PRD", href: "#" },
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1162" }
-          ],
-          update: "MVP implemented. Advanced config in design review.",
-          details: [
-            "Customize/Set up optimization through copilot flow",
-            "Select dataset (GHC generate, existing dataset, local dataset, <s>real traces is scoped out</s>)",
-            "Deploy flow (1 click deploy as new version vs customizable deploy page)"
-          ],
-          next: "Review portal design with PM and confirm scope.",
-          gallery: true
-        },
-        {
-          name: "GitHub Copilot App Canvas MVP",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1404",
-          status: "Fit and finish", statusClass: "done",
-          links: [
-            { label: "Prototype link", href: "#" },
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1404" }
-          ],
-          update: "Design in implementation/iteration.",
-          details: [],
-          next: "Keep iterating the MVP direction and capture follow-up decisions.",
-          gallery: true
+        // ── Copy above block and paste here for a new week ──
+      ];
+
+      let report = weeks[0];
+
+      // ╔══════════════════════════════════════════════════════════════╗
+      // ║  RENDERER — you should not need to edit below this line      ║
+      // ╚══════════════════════════════════════════════════════════════╝
+
+      function render() {
+        const app = document.getElementById("app");
+        let html = "";
+
+        // header with week selector
+        const options = weeks
+          .map(
+            (w, i) =>
+              `<option value="${i}"${w === report ? " selected" : ""}>${esc(w.date)}</option>`,
+          )
+          .join("");
+        html += `<div class="header"><h1>${report.title}</h1><select class="week-select" id="week-select">${options}</select></div>`;
+
+        // sections
+        report.sections.forEach((sec) => {
+          html += `<div class="section">`;
+          html += `<div class="section-head">${sec.emoji ? `<span class="emoji">${sec.emoji}</span>` : ""}${sec.heading}</div>`;
+          sec.items.forEach((item) => {
+            html += `<div class="card">`;
+            if (item.name) {
+              const linksHtml = item.links
+                .map(
+                  (l, i) =>
+                    `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a><button class="edit-link" data-edit-idx="${i}" title="Edit link">✎</button>`,
+                )
+                .join(" ");
+              html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
+            }
+            if (item.status) {
+              html += `<div class="status-line"><span class="status-tag ${item.statusClass}">${esc(item.status)}</span></div>`;
+            }
+            if (item.update) {
+              html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
+            }
+            if (item.details && item.details.length) {
+              html += `<div class="card-body"><ul>${item.details.map((b) => `<li>${b}</li>`).join("")}</ul></div>`;
+            }
+            if (item.next) {
+              html += `<div class="field-row"><span class="field-label">Next step:</span> ${esc(item.next)}</div>`;
+            }
+            if (item.gallery) {
+              html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
+            }
+            html += `</div>`;
+          });
+          html += `</div>`;
+        });
+
+        // backlog
+        if (report.backlog.length) {
+          html += `<div class="section"><div class="section-head">Backlog</div><div class="card"><ul class="backlog-list">${report.backlog.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></div>`;
         }
-      ]
-    },
 
-    {
-      heading: "Work in progress",
-      emoji: "⭐",
-      items: [
-        {
-          name: "Create hosted agent page improvement",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1373",
-          status: "Iteration", statusClass: "progress",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1373" }
-          ],
-          update: "Reviewed the hosted agent page direction.",
-          details: [
-            "Most users rarely interact with filters → move to the right so the cards stay more prominent",
-            "Add another next-step CTA in the selected card to improve discoverability, while keeping the bottom CTA",
-            "Limit the number of default cards and use \"view more\""
-          ],
-          next: "Continue refining the page against the latest design direction.",
-          gallery: true
-        },
-        {
-          name: "Create agent main page improvement",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1374",
-          status: "Early exploration", statusClass: "kickoff",
-          links: [
-            { label: "See full analysis", href: "#" },
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1374" }
-          ],
-          update: "Consolidated feedbacks & created initial short term proposals.",
-          details: [],
-          next: "Think out of the box and embed these options in the actual step. Competitor analysis.",
-          gallery: true
-        },
-        {
-          name: "Auth redesign - agent user impersonation",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1405",
-          status: "Kickoff", statusClass: "kickoff",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1405" }
-          ],
-          update: "Kickoff phase.",
-          details: [],
-          next: "Define the initial direction and align the first design pass.",
-          gallery: false
+        app.innerHTML = html;
+        document.querySelectorAll("[data-gallery]").forEach(initGallery);
+      }
+
+      function esc(s) {
+        if (!s) return "";
+        const d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      // ── localStorage persistence for screenshots ──
+      const STORAGE_KEY = "weekly-report-screenshots";
+      function loadScreenshots() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        } catch {
+          return {};
         }
-      ]
-    },
+      }
+      function saveScreenshots() {
+        const data = {};
+        document.querySelectorAll("[data-gallery]").forEach((g) => {
+          const key = g.dataset.gallery;
+          const imgs = [...g.querySelectorAll(".thumb img")].map(
+            (img) => img.src,
+          );
+          if (imgs.length) data[key] = imgs;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
 
-    {
-      heading: "On pause",
-      emoji: "⭐",
-      items: [
-        {
-          name: "Toolbox in prompt agent",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1439",
-          status: "On pause", statusClass: "pause",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1439" }
-          ],
-          update: "Waiting for latest design from portal.",
-          details: [],
-          next: "Review the portal update and continue once the design is available.",
-          gallery: false
-        },
-        {
-          name: "Region availability iteration",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1118",
-          status: "On pause", statusClass: "pause",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1118" }
-          ],
-          update: "Waiting for API from Dan to proceed.",
-          details: [],
-          next: "Resume once the API dependency is available.",
-          gallery: false
+      // gallery: add, remove, resize, drag-drop
+      function initGallery(container) {
+        if (container.dataset.initialized) return;
+        container.dataset.initialized = "true";
+        // + button to pick files
+        const addBtn = document.createElement("button");
+        addBtn.className = "add-btn";
+        addBtn.textContent = "+";
+        addBtn.title = "Add more screenshots";
+        container.appendChild(addBtn);
+        addBtn.addEventListener("click", () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.multiple = true;
+          input.addEventListener("change", () => {
+            [...input.files].forEach((f) => addThumb(container, f));
+          });
+          input.click();
+        });
+        // x button to remove entire drop zone
+        const closeBtn = document.createElement("button");
+        closeBtn.className = "close-gallery";
+        closeBtn.textContent = "\u00d7";
+        closeBtn.title = "Remove screenshot area";
+        closeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          addBtn.style.display = "none";
+          closeBtn.style.display = "none";
+        });
+        container.appendChild(closeBtn);
+        // drag-drop on the whole gallery area
+        container.addEventListener("dragover", (e) => e.preventDefault());
+        container.addEventListener("drop", (e) => {
+          e.preventDefault();
+          [...e.dataTransfer.files]
+            .filter((f) => f.type.startsWith("image/"))
+            .forEach((f) => addThumb(container, f));
+        });
+        // restore saved screenshots
+        const saved = loadScreenshots()[container.dataset.gallery];
+        if (saved && saved.length) {
+          container.style.display = "flex";
+          saved.forEach((src) => addThumbFromSrc(container, src));
         }
-      ]
-    },
+      }
+      function addThumb(container, file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          addThumbFromSrc(container, reader.result);
+          saveScreenshots();
+        };
+        reader.readAsDataURL(file);
+      }
+      function addThumbFromSrc(container, src) {
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        thumb.draggable = true;
+        const img = document.createElement("img");
+        img.src = src;
+        img.draggable = false;
+        thumb.appendChild(img);
+        const rm = document.createElement("span");
+        rm.className = "remove";
+        rm.textContent = "×";
+        rm.addEventListener("click", (e) => {
+          e.stopPropagation();
+          thumb.remove();
+          saveScreenshots();
+        });
+        thumb.appendChild(rm);
+        // drag-to-reorder
+        thumb.addEventListener("dragstart", (e) => {
+          thumb.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("text/plain", "");
+        });
+        thumb.addEventListener("dragend", () => {
+          thumb.classList.remove("dragging");
+          container.querySelectorAll(".thumb").forEach(t => t.classList.remove("drag-over"));
+          saveScreenshots();
+        });
+        thumb.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+          const dragging = container.querySelector(".dragging");
+          if (dragging && dragging !== thumb) thumb.classList.add("drag-over");
+        });
+        thumb.addEventListener("dragleave", () => thumb.classList.remove("drag-over"));
+        thumb.addEventListener("drop", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          thumb.classList.remove("drag-over");
+          const dragging = container.querySelector(".dragging");
+          if (dragging && dragging !== thumb) {
+            const thumbs = [...container.querySelectorAll(".thumb")];
+            const fromIdx = thumbs.indexOf(dragging);
+            const toIdx = thumbs.indexOf(thumb);
+            if (fromIdx < toIdx) thumb.after(dragging);
+            else container.insertBefore(dragging, thumb);
+          }
+        });
+        // drag-to-resize handle
+        const handle = document.createElement("div");
+        handle.className = "resize-handle";
+        thumb.appendChild(handle);
+        let startX, startY, startW, startH;
+        handle.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          startX = e.clientX;
+          startY = e.clientY;
+          startW = thumb.offsetWidth;
+          startH = thumb.offsetHeight;
+          const onMove = (ev) => {
+            const w = Math.max(60, startW + ev.clientX - startX);
+            const h = Math.max(40, startH + ev.clientY - startY);
+            thumb.style.width = w + "px";
+            thumb.style.height = h + "px";
+          };
+          const onUp = () => {
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", onUp);
+          };
+          document.addEventListener("mousemove", onMove);
+          document.addEventListener("mouseup", onUp);
+        });
+        const addBtn = container.querySelector(".add-btn");
+        if (addBtn) container.insertBefore(thumb, addBtn);
+        else container.appendChild(thumb);
+      }
 
-    {
-      heading: "Fluent → VSCode",
-      emoji: "⭐",
-      items: [
-        {
-          name: "Design System: VS Code Extension",
-          issue: "https://github.com/coreai-microsoft/caidr/issues/1351",
-          status: "Active", statusClass: "progress",
-          links: [
-            { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1351" }
-          ],
-          update: "Merged all components this week! 1.1.0. Continuing minor improvements.",
-          details: [],
-          next: "Give the eng team a quick walkthrough of available components. Have Kham help replace current components in production.",
-          gallery: false
+      render();
+
+      // week selector
+      document.addEventListener("change", (e) => {
+        if (e.target.id === "week-select") {
+          report = weeks[+e.target.value];
+          render();
         }
-      ]
-    }
-  ],
+      });
 
-  backlog: [
-    "Minor - Main CTA for tool catalog when new features added",
-    "Agentic workflow",
-    "Telemetry we would like to track",
-    "Long running task support",
-    "Guardrails",
-    "Activity protocol??",
-    "Managed agent",
-    "Voice Live (Leo will follow up with portal PM)"
-  ]
-  },
-  // ── Copy above block and paste here for a new week ──
-];
+      // ── inline link editing ──
 
-let report = weeks[0];
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  RENDERER — you should not need to edit below this line      ║
-// ╚══════════════════════════════════════════════════════════════╝
-
-function render() {
-  const app = document.getElementById("app");
-  let html = "";
-
-  // header with week selector
-  const options = weeks.map((w, i) => `<option value="${i}"${w === report ? ' selected' : ''}>${esc(w.date)}</option>`).join("");
-  html += `<div class="header"><h1>${report.title}</h1><select class="week-select" id="week-select">${options}</select></div>`;
-
-  // sections
-  report.sections.forEach((sec) => {
-    html += `<div class="section">`;
-    html += `<div class="section-head">${sec.emoji ? `<span class="emoji">${sec.emoji}</span>` : ""}${sec.heading}</div>`;
-    sec.items.forEach((item) => {
-      html += `<div class="card">`;
-      if (item.name) {
-        const linksHtml = item.links.map((l,i) => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a><button class="edit-link" data-edit-idx="${i}" title="Edit link">✎</button>`).join(" ");
-        html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
+      function findItem(name) {
+        for (const sec of report.sections)
+          for (const item of sec.items) if (item.name === name) return item;
+        return null;
       }
-      if (item.status) {
-        html += `<div class="status-line"><span class="status-tag ${item.statusClass}">${esc(item.status)}</span></div>`;
-      }
-      if (item.update) {
-        html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
-      }
-      if (item.details && item.details.length) {
-        html += `<div class="card-body"><ul>${item.details.map(b => `<li>${b}</li>`).join("")}</ul></div>`;
-      }
-      if (item.next) {
-        html += `<div class="field-row"><span class="field-label">Next step:</span> ${esc(item.next)}</div>`;
-      }
-      if (item.gallery) {
-        html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
-      }
-      html += `</div>`;
-    });
-    html += `</div>`;
-  });
 
-  // backlog
-  if (report.backlog.length) {
-    html += `<div class="section"><div class="section-head">Backlog</div><div class="card"><ul class="backlog-list">${report.backlog.map(b => `<li>${esc(b)}</li>`).join("")}</ul></div></div>`;
-  }
-
-
-
-  app.innerHTML = html;
-  document.querySelectorAll("[data-gallery]").forEach(initGallery);
-}
-
-function esc(s) { if (!s) return ""; const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
-
-// ── localStorage persistence for screenshots ──
-const STORAGE_KEY = "weekly-report-screenshots";
-function loadScreenshots() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; } }
-function saveScreenshots() {
-  const data = {};
-  document.querySelectorAll("[data-gallery]").forEach(g => {
-    const key = g.dataset.gallery;
-    const imgs = [...g.querySelectorAll(".thumb img")].map(img => img.src);
-    if (imgs.length) data[key] = imgs;
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-// gallery: add, remove, resize, drag-drop
-function initGallery(container) {
-  if (container.dataset.initialized) return;
-  container.dataset.initialized = "true";
-  // + button to pick files
-  const addBtn = document.createElement("button");
-  addBtn.className = "add-btn"; addBtn.textContent = "+"; addBtn.title = "Add more screenshots";
-  container.appendChild(addBtn);
-  addBtn.addEventListener("click", () => {
-    const input = document.createElement("input"); input.type = "file"; input.accept = "image/*"; input.multiple = true;
-    input.addEventListener("change", () => { [...input.files].forEach(f => addThumb(container, f)); });
-    input.click();
-  });
-  // x button to remove entire drop zone
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "close-gallery";
-  closeBtn.textContent = "\u00d7";
-  closeBtn.title = "Remove screenshot area";
-  closeBtn.addEventListener("click", (e) => { e.stopPropagation(); addBtn.style.display = "none"; closeBtn.style.display = "none"; });
-  container.appendChild(closeBtn);
-  // drag-drop on the whole gallery area
-  container.addEventListener("dragover", e => e.preventDefault());
-  container.addEventListener("drop", e => { e.preventDefault(); [...e.dataTransfer.files].filter(f => f.type.startsWith("image/")).forEach(f => addThumb(container, f)); });
-  // restore saved screenshots
-  const saved = loadScreenshots()[container.dataset.gallery];
-  if (saved && saved.length) {
-    container.style.display = "flex";
-    saved.forEach(src => addThumbFromSrc(container, src));
-  }
-}
-function addThumb(container, file) {
-  const reader = new FileReader();
-  reader.onload = () => { addThumbFromSrc(container, reader.result); saveScreenshots(); };
-  reader.readAsDataURL(file);
-}
-function addThumbFromSrc(container, src) {
-  const thumb = document.createElement("div"); thumb.className = "thumb";
-  const img = document.createElement("img"); img.src = src; thumb.appendChild(img);
-  const rm = document.createElement("span"); rm.className = "remove"; rm.textContent = "×";
-  rm.addEventListener("click", e => { e.stopPropagation(); thumb.remove(); saveScreenshots(); }); thumb.appendChild(rm);
-  // drag-to-resize handle
-  const handle = document.createElement("div"); handle.className = "resize-handle";
-  thumb.appendChild(handle);
-  let startX, startY, startW, startH;
-  handle.addEventListener("mousedown", (e) => {
-    e.preventDefault(); e.stopPropagation();
-    startX = e.clientX; startY = e.clientY;
-    startW = thumb.offsetWidth; startH = thumb.offsetHeight;
-    const onMove = (ev) => {
-      const w = Math.max(60, startW + ev.clientX - startX);
-      const h = Math.max(40, startH + ev.clientY - startY);
-      thumb.style.width = w + "px"; thumb.style.height = h + "px";
-    };
-    const onUp = () => { document.removeEventListener("mousemove", onMove); document.removeEventListener("mouseup", onUp); };
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
-  });
-  const addBtn = container.querySelector(".add-btn");
-  if (addBtn) container.insertBefore(thumb, addBtn);
-  else container.appendChild(thumb);
-}
-
-render();
-
-// week selector
-document.addEventListener("change", (e) => {
-  if (e.target.id === "week-select") {
-    report = weeks[+e.target.value];
-    render();
-  }
-});
-
-// ── inline link editing ──
-
-function findItem(name) {
-  for (const sec of report.sections) for (const item of sec.items) if (item.name === name) return item;
-  return null;
-}
-
-// click pencil to edit, click + to add
-document.addEventListener("click", (e) => {
-  const editBtn = e.target.closest(".edit-link");
-  if (editBtn) {
-    const card = editBtn.closest("[data-item-id]");
-    const item = findItem(card.dataset.itemId);
-    if (!item) return;
-    openLinkEditor(item, +editBtn.dataset.editIdx);
-    return;
-  }
-  const addBtn = e.target.closest(".add-link");
-  if (addBtn && !addBtn.querySelector(".add-menu")) {
-    const card = addBtn.closest("[data-item-id]");
-    const itemName = card.dataset.itemId;
-    const menu = document.createElement("div");
-    menu.className = "add-menu";
-    menu.innerHTML = `<button data-action="link">Add link</button><button data-action="screenshot">Add screenshots</button>`;
-    addBtn.appendChild(menu);
-    menu.addEventListener("click", (ev) => {
-      ev.stopPropagation();
-      const action = ev.target.dataset.action;
-      menu.remove();
-      if (action === "link") {
-        const item = findItem(itemName);
-        if (!item) return;
-        item.links.push({ label: "New Link", href: "#" });
-        openLinkEditor(item, item.links.length - 1);
-      } else if (action === "screenshot") {
-        let gallery = card.closest(".card").querySelector("[data-gallery]");
-        if (!gallery) {
-          gallery = document.createElement("div");
-          gallery.className = "gallery";
-          gallery.dataset.gallery = itemName;
-          card.closest(".card").appendChild(gallery);
-          initGallery(gallery);
+      // click pencil to edit, click + to add
+      document.addEventListener("click", (e) => {
+        const editBtn = e.target.closest(".edit-link");
+        if (editBtn) {
+          const card = editBtn.closest("[data-item-id]");
+          const item = findItem(card.dataset.itemId);
+          if (!item) return;
+          openLinkEditor(item, +editBtn.dataset.editIdx);
+          return;
         }
-        gallery.style.display = "flex";
-      }
-    });
-    setTimeout(() => {
-      const dismiss = (ev2) => { if (!menu.contains(ev2.target)) { menu.remove(); document.removeEventListener("click", dismiss); } };
-      document.addEventListener("click", dismiss);
-    }, 0);
-    return;
-  }
-});
+        const addBtn = e.target.closest(".add-link");
+        if (addBtn && !addBtn.querySelector(".add-menu")) {
+          const card = addBtn.closest("[data-item-id]");
+          const itemName = card.dataset.itemId;
+          const menu = document.createElement("div");
+          menu.className = "add-menu";
+          menu.innerHTML = `<button data-action="link">Add link</button><button data-action="screenshot">Add screenshots</button>`;
+          addBtn.appendChild(menu);
+          menu.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const action = ev.target.dataset.action;
+            menu.remove();
+            if (action === "link") {
+              const item = findItem(itemName);
+              if (!item) return;
+              item.links.push({ label: "New Link", href: "#" });
+              openLinkEditor(item, item.links.length - 1);
+            } else if (action === "screenshot") {
+              let gallery = card
+                .closest(".card")
+                .querySelector("[data-gallery]");
+              if (!gallery) {
+                gallery = document.createElement("div");
+                gallery.className = "gallery";
+                gallery.dataset.gallery = itemName;
+                card.closest(".card").appendChild(gallery);
+                initGallery(gallery);
+              }
+              gallery.style.display = "flex";
+            }
+          });
+          setTimeout(() => {
+            const dismiss = (ev2) => {
+              if (!menu.contains(ev2.target)) {
+                menu.remove();
+                document.removeEventListener("click", dismiss);
+              }
+            };
+            document.addEventListener("click", dismiss);
+          }, 0);
+          return;
+        }
+      });
 
-// right-click removed — use the Delete button in the edit modal instead
+      // right-click removed — use the Delete button in the edit modal instead
 
-function openLinkEditor(item, idx) {
-  const link = item.links[idx];
-  const overlay = document.createElement("div");
-  overlay.className = "link-edit-overlay";
-  overlay.innerHTML = `
+      function openLinkEditor(item, idx) {
+        const link = item.links[idx];
+        const overlay = document.createElement("div");
+        overlay.className = "link-edit-overlay";
+        overlay.innerHTML = `
     <div class="link-edit-box">
       <h3>Edit link</h3>
       <label>Label</label>
@@ -483,80 +1046,105 @@ function openLinkEditor(item, idx) {
         <button class="primary" id="le-save">Save</button>
       </div>
     </div>`;
-  document.body.appendChild(overlay);
-  const labelInput = overlay.querySelector("#le-label");
-  const hrefInput = overlay.querySelector("#le-href");
-  labelInput.focus();
-  labelInput.select();
+        document.body.appendChild(overlay);
+        const labelInput = overlay.querySelector("#le-label");
+        const hrefInput = overlay.querySelector("#le-href");
+        labelInput.focus();
+        labelInput.select();
 
-  overlay.querySelector("#le-save").onclick = () => {
-    link.label = labelInput.value || "Link";
-    link.href = hrefInput.value || "#";
-    overlay.remove();
-    render();
-  };
-  overlay.querySelector("#le-cancel").onclick = () => overlay.remove();
-  overlay.querySelector("#le-delete").onclick = () => {
-    item.links.splice(idx, 1);
-    overlay.remove();
-    render();
-  };
-  overlay.addEventListener("click", (ev) => { if (ev.target === overlay) overlay.remove(); });
-  hrefInput.addEventListener("keydown", (ev) => { if (ev.key === "Enter") overlay.querySelector("#le-save").click(); });
-}
+        overlay.querySelector("#le-save").onclick = () => {
+          link.label = labelInput.value || "Link";
+          link.href = hrefInput.value || "#";
+          overlay.remove();
+          render();
+        };
+        overlay.querySelector("#le-cancel").onclick = () => overlay.remove();
+        overlay.querySelector("#le-delete").onclick = () => {
+          item.links.splice(idx, 1);
+          overlay.remove();
+          render();
+        };
+        overlay.addEventListener("click", (ev) => {
+          if (ev.target === overlay) overlay.remove();
+        });
+        hrefInput.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter") overlay.querySelector("#le-save").click();
+        });
+      }
 
-// lightbox zoom on thumbnail click
-document.addEventListener("click", (e) => {
-  const thumb = e.target.closest(".gallery .thumb");
-  if (!thumb || e.target.closest(".remove") || e.target.closest(".resize-handle")) return;
-  const img = thumb.querySelector("img");
-  if (!img) return;
-  const lb = document.createElement("div");
-  lb.className = "lightbox";
-  lb.innerHTML = `<img src="${img.src}">`;
-  lb.addEventListener("click", () => lb.remove());
-  document.addEventListener("keydown", function esc(ev) { if (ev.key === "Escape") { lb.remove(); document.removeEventListener("keydown", esc); } });
-  document.body.appendChild(lb);
-});
+      // lightbox zoom on thumbnail click
+      document.addEventListener("click", (e) => {
+        const thumb = e.target.closest(".gallery .thumb");
+        if (
+          !thumb ||
+          e.target.closest(".remove") ||
+          e.target.closest(".resize-handle")
+        )
+          return;
+        const img = thumb.querySelector("img");
+        if (!img) return;
+        const lb = document.createElement("div");
+        lb.className = "lightbox";
+        lb.innerHTML = `<img src="${img.src}">`;
+        lb.addEventListener("click", () => lb.remove());
+        document.addEventListener("keydown", function esc(ev) {
+          if (ev.key === "Escape") {
+            lb.remove();
+            document.removeEventListener("keydown", esc);
+          }
+        });
+        document.body.appendChild(lb);
+      });
 
-// clipboard paste → screenshots into active card
-let activeGalleryCard = null;
-document.addEventListener("click", (e) => {
-  const card = e.target.closest(".card");
-  if (card) {
-    document.querySelectorAll(".card").forEach(c => c.classList.remove("paste-target"));
-    card.classList.add("paste-target");
-    activeGalleryCard = card;
-  } else if (!e.target.closest(".lightbox") && !e.target.closest(".link-edit-overlay") && !e.target.closest(".add-menu")) {
-    document.querySelectorAll(".card").forEach(c => c.classList.remove("paste-target"));
-    activeGalleryCard = null;
-  }
-});
-document.addEventListener("paste", (e) => {
-  const items = [...(e.clipboardData || {}).items || []];
-  const images = items.filter(i => i.type.startsWith("image/"));
-  if (!images.length || !activeGalleryCard) return;
-  e.preventDefault();
-  let gallery = activeGalleryCard.querySelector("[data-gallery]");
-  if (!gallery) {
-    const itemId = activeGalleryCard.querySelector("[data-item-id]");
-    const name = itemId ? itemId.dataset.itemId : "unnamed";
-    gallery = document.createElement("div");
-    gallery.className = "gallery";
-    gallery.dataset.gallery = name;
-    gallery.style.display = "flex";
-    activeGalleryCard.appendChild(gallery);
-    initGallery(gallery);
-  }
-  gallery.style.display = "flex";
-  images.forEach(item => {
-    const blob = item.getAsFile();
-    if (!blob) return;
-    const reader = new FileReader();
-    reader.onload = () => { addThumbFromSrc(gallery, reader.result); saveScreenshots(); };
-    reader.readAsDataURL(blob);
-  });
-});
-</script>
-</body>
+      // clipboard paste → screenshots into active card
+      let activeGalleryCard = null;
+      document.addEventListener("click", (e) => {
+        const card = e.target.closest(".card");
+        if (card) {
+          document
+            .querySelectorAll(".card")
+            .forEach((c) => c.classList.remove("paste-target"));
+          card.classList.add("paste-target");
+          activeGalleryCard = card;
+        } else if (
+          !e.target.closest(".lightbox") &&
+          !e.target.closest(".link-edit-overlay") &&
+          !e.target.closest(".add-menu")
+        ) {
+          document
+            .querySelectorAll(".card")
+            .forEach((c) => c.classList.remove("paste-target"));
+          activeGalleryCard = null;
+        }
+      });
+      document.addEventListener("paste", (e) => {
+        const items = [...((e.clipboardData || {}).items || [])];
+        const images = items.filter((i) => i.type.startsWith("image/"));
+        if (!images.length || !activeGalleryCard) return;
+        e.preventDefault();
+        let gallery = activeGalleryCard.querySelector("[data-gallery]");
+        if (!gallery) {
+          const itemId = activeGalleryCard.querySelector("[data-item-id]");
+          const name = itemId ? itemId.dataset.itemId : "unnamed";
+          gallery = document.createElement("div");
+          gallery.className = "gallery";
+          gallery.dataset.gallery = name;
+          gallery.style.display = "flex";
+          activeGalleryCard.appendChild(gallery);
+          initGallery(gallery);
+        }
+        gallery.style.display = "flex";
+        images.forEach((item) => {
+          const blob = item.getAsFile();
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            addThumbFromSrc(gallery, reader.result);
+            saveScreenshots();
+          };
+          reader.readAsDataURL(blob);
+        });
+      });
+    </script>
+  </body>
 </html>
