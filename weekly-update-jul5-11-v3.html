@@ -866,10 +866,12 @@
         // drag-drop on the whole gallery area
         container.addEventListener("dragover", (e) => {
           e.preventDefault();
-          if (document._draggingThumb) container.classList.add("drag-over-gallery");
+          if (document._draggingThumb)
+            container.classList.add("drag-over-gallery");
         });
         container.addEventListener("dragleave", (e) => {
-          if (!container.contains(e.relatedTarget)) container.classList.remove("drag-over-gallery");
+          if (!container.contains(e.relatedTarget))
+            container.classList.remove("drag-over-gallery");
         });
         container.addEventListener("drop", (e) => {
           e.preventDefault();
@@ -929,8 +931,12 @@
         });
         thumb.addEventListener("dragend", () => {
           thumb.classList.remove("dragging");
-          document.querySelectorAll(".thumb.drag-over").forEach(t => t.classList.remove("drag-over"));
-          document.querySelectorAll(".gallery.drag-over-gallery").forEach(g => g.classList.remove("drag-over-gallery"));
+          document
+            .querySelectorAll(".thumb.drag-over")
+            .forEach((t) => t.classList.remove("drag-over"));
+          document
+            .querySelectorAll(".gallery.drag-over-gallery")
+            .forEach((g) => g.classList.remove("drag-over-gallery"));
           document._draggingThumb = null;
           saveScreenshots();
         });
@@ -940,7 +946,9 @@
           const dragging = document._draggingThumb;
           if (dragging && dragging !== thumb) thumb.classList.add("drag-over");
         });
-        thumb.addEventListener("dragleave", () => thumb.classList.remove("drag-over"));
+        thumb.addEventListener("dragleave", () =>
+          thumb.classList.remove("drag-over"),
+        );
         thumb.addEventListener("drop", (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -1150,13 +1158,16 @@
         const card = e.target.closest(".card");
         if (card && !e.target.closest(".gallery")) {
           e.preventDefault();
-          document.querySelectorAll(".card.drop-card-target").forEach(c => c.classList.remove("drop-card-target"));
+          document
+            .querySelectorAll(".card.drop-card-target")
+            .forEach((c) => c.classList.remove("drop-card-target"));
           card.classList.add("drop-card-target");
         }
       });
       document.addEventListener("dragleave", (e) => {
         const card = e.target.closest(".card.drop-card-target");
-        if (card && !card.contains(e.relatedTarget)) card.classList.remove("drop-card-target");
+        if (card && !card.contains(e.relatedTarget))
+          card.classList.remove("drop-card-target");
       });
       document.addEventListener("drop", (e) => {
         const card = e.target.closest(".card.drop-card-target");
