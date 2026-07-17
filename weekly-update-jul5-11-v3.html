@@ -533,8 +533,8 @@
       .video-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; margin-top: 4px; }
       .video-link::before { content: '🎬'; }
       .resource-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-      .resource-chips a { font-size: 11px; color: var(--text2); text-decoration: none; }
-      .resource-chips a:hover { color: var(--accent); text-decoration: underline; }
+      .resource-chips a { font-size: 11px; color: var(--link); text-decoration: none; }
+      .resource-chips a:hover { text-decoration: underline; }
       .resource-chips a::before { content: '→ '; opacity: 0.5; }
     </style>
   </head>
@@ -1000,18 +1000,18 @@
             if (item.update) {
               html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
             }
-            // Resource chips (non-GitHub-Issue links + video)
-            {
-              const bodyLinks = item.links ? item.links.filter(l => l.label !== "GitHub Issue") : [];
-              const chips = bodyLinks.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a>`);
-              if (item.video) chips.push(`<a href="${esc(item.video.href)}" target="_blank" rel="noreferrer">🎬 ${esc(item.video.label)}</a>`);
-              if (chips.length) html += `<div class="resource-chips">${chips.join("")}</div>`;
-            }
             if (item.details && item.details.length) {
               html += `<div class="card-body"><ul>${item.details.map((b) => `<li>${b}</li>`).join("")}</ul></div>`;
             }
             if (item.next) {
               html += `<div class="field-row"><span class="field-label">Next step:</span> ${esc(item.next)}</div>`;
+            }
+            // Resource links (non-GitHub-Issue links + video) below next step
+            {
+              const bodyLinks = item.links ? item.links.filter(l => l.label !== "GitHub Issue") : [];
+              const chips = bodyLinks.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a>`);
+              if (item.video) chips.push(`<a href="${esc(item.video.href)}" target="_blank" rel="noreferrer">🎬 ${esc(item.video.label)}</a>`);
+              if (chips.length) html += `<div class="resource-chips">${chips.join("")}</div>`;
             }
             if (item.gallery) {
               html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
