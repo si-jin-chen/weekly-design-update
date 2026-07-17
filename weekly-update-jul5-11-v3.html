@@ -527,6 +527,9 @@
       .collapsed-notes .notes-body li { margin-bottom: 2px; }
       .video-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; margin-top: 4px; }
       .video-link::before { content: '🎬'; }
+      .resource-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+      .resource-chips a { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--surface); border: 1px solid var(--border); color: var(--accent); text-decoration: none; white-space: nowrap; }
+      .resource-chips a:hover { background: var(--accent); color: #fff; }
     </style>
   </head>
   <body>
@@ -971,7 +974,10 @@
           sec.items.forEach((item) => {
             html += `<div class="card">`;
             if (item.name) {
-              const linksHtml = item.links
+              // Only show GitHub Issue link in header
+              const headerLinks = item.links.filter(l => l.label === "GitHub Issue");
+              const bodyLinks = item.links.filter(l => l.label !== "GitHub Issue");
+              const linksHtml = headerLinks
                 .map(
                   (l, i) =>
                     `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a><button class="edit-link" data-edit-idx="${i}" title="Edit link">✎</button>`,
@@ -985,14 +991,18 @@
             if (item.update) {
               html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
             }
+            // Resource chips (non-GitHub-Issue links + video)
+            {
+              const bodyLinks = item.links ? item.links.filter(l => l.label !== "GitHub Issue") : [];
+              const chips = bodyLinks.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a>`);
+              if (item.video) chips.push(`<a href="${esc(item.video.href)}" target="_blank" rel="noreferrer">🎬 ${esc(item.video.label)}</a>`);
+              if (chips.length) html += `<div class="resource-chips">${chips.join("")}</div>`;
+            }
             if (item.details && item.details.length) {
               html += `<div class="card-body"><ul>${item.details.map((b) => `<li>${b}</li>`).join("")}</ul></div>`;
             }
             if (item.next) {
               html += `<div class="field-row"><span class="field-label">Next step:</span> ${esc(item.next)}</div>`;
-            }
-            if (item.video) {
-              html += `<div class="field-row"><a class="video-link" href="${esc(item.video.href)}" target="_blank" rel="noreferrer">${esc(item.video.label)}</a></div>`;
             }
             if (item.gallery) {
               html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
