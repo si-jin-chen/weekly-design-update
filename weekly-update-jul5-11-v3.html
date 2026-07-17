@@ -515,8 +515,8 @@
         margin-bottom: 3px;
       }
       .status-tag.completed { background: #e6f4ea; color: #1e7e34; }
-      .completed-section .card { opacity: 0.75; }
-      .completed-section .card:hover { opacity: 1; }
+      .completed-section .card { }
+      .completed-section .card:hover { }
       .collapsed-notes { margin-top: 6px; }
       .collapsed-notes summary { padding: 4px 8px; font-size: 11px; font-weight: 500; color: var(--text2); background: transparent; cursor: pointer; list-style: none; }
       .collapsed-notes summary::-webkit-details-marker { display: none; }
@@ -677,7 +677,7 @@
                 label: "Demo recording",
                 href: "https://microsoftapc-my.sharepoint.com/:v:/g/personal/qinzhu_microsoft_com/IQBr-7vmj4-hSY61ekSaoGBVAWkm_zNIJrmvi4mJ-SznqzQ?e=HYY6Uj",
               },
-              collapsedNotes: [
+              notes: [
                 "Added to awesome-copilot — searchable & installable from GHCP plugins",
                 "Waiting for official launch, then gather telemetry and feedback",
               ],
@@ -958,6 +958,9 @@
               html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
             }
             if (item.video) html += `<div class="field-row"><a class="video-link" href="${esc(item.video.href)}" target="_blank" rel="noreferrer">${esc(item.video.label)}</a></div>`;
+            if (item.notes && item.notes.length) {
+              html += `<div class="card-body" style="font-size:12px;color:var(--text2)"><ul>${item.notes.map((n) => `<li>${n}</li>`).join("")}</ul></div>`;
+            }
             if (item.collapsedNotes && item.collapsedNotes.length) {
               html += `<details class="collapsed-notes"><summary>Notes</summary><div class="notes-body"><ul>${item.collapsedNotes.map((n) => `<li>${n}</li>`).join("")}</ul></div></details>`;
             }
