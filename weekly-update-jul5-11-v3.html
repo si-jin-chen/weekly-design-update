@@ -514,6 +514,19 @@
       .backlog-list li {
         margin-bottom: 3px;
       }
+      .status-tag.completed { background: #e6f4ea; color: #1e7e34; }
+      .completed-section .card { opacity: 0.75; }
+      .completed-section .card:hover { opacity: 1; }
+      .collapsed-notes { margin-top: 6px; }
+      .collapsed-notes summary { padding: 4px 8px; font-size: 11px; font-weight: 500; color: var(--text2); background: transparent; cursor: pointer; list-style: none; }
+      .collapsed-notes summary::-webkit-details-marker { display: none; }
+      .collapsed-notes summary::before { content: '▸ '; }
+      .collapsed-notes[open] summary::before { content: '▾ '; }
+      .collapsed-notes .notes-body { padding: 4px 8px; font-size: 12px; color: var(--text2); }
+      .collapsed-notes .notes-body ul { margin: 0; padding-left: 16px; }
+      .collapsed-notes .notes-body li { margin-bottom: 2px; }
+      .video-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; margin-top: 4px; }
+      .video-link::before { content: '🎬'; }
     </style>
   </head>
   <body>
@@ -525,6 +538,195 @@
       // ╚══════════════════════════════════════════════════════════════╝
 
       const weeks = [
+        // ── Week 2: Jul 13-16 ──
+        {
+          title: "Amy's Design Update",
+          date: "Jul 13 - Jul 16, 2026",
+
+          sections: [
+            {
+              heading: "Fit and finish",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "Optimization",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1162",
+                  status: "Fit and finish",
+                  statusClass: "done",
+                  links: [
+                    { label: "Link to PRD", href: "#" },
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1162" },
+                  ],
+                  update: "Reviewed Ikuyo's optimized prompt-agent creation flow. Significant customization capability for customers confirmed.",
+                  details: [
+                    "Inline dataset creation deferred while broader dataset UX improvements proceed",
+                    "Prompt-agent creation flow reviewed and approved direction",
+                  ],
+                  next: "Continue refining the optimization flow with eng.",
+                  gallery: true,
+                },
+                {
+                  name: "GitHub Copilot App Canvas MVP",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1404",
+                  status: "Fit and finish",
+                  statusClass: "done",
+                  links: [
+                    { label: "Prototype link", href: "#" },
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1404" },
+                  ],
+                  update: "Investigating design language with Tian. Exploring portal patterns as foundation for the VS Code experience.",
+                  details: [
+                    "Exploring whether portal design patterns can be reused and restyled for MVP",
+                    "Shared demo repo with Leo for metrics/access discussion",
+                  ],
+                  next: "Finalize design language direction and begin restyling MVP experiences.",
+                  gallery: true,
+                },
+              ],
+            },
+
+            {
+              heading: "Work in progress",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "Toolbox in prompt agent",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1439",
+                  status: "Active — decision made",
+                  statusClass: "progress",
+                  links: [
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1439" },
+                  ],
+                  update: "Received portal designs. Built coded prototype with 3 variants. Team selected variant #2.",
+                  details: [
+                    "Created branch 'toolbox-in-prompt-agent-design' with coded prototype",
+                    "Explored 3 TOOL section variants — leadership wanted to see coded experience",
+                    "Design team selected variant #2",
+                    "Awaiting feedback from Junjie and Xiaofu",
+                  ],
+                  next: "Incorporate Junjie/Xiaofu feedback and finalize variant #2 for implementation.",
+                  gallery: true,
+                },
+                {
+                  name: "Create agent main page improvement",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1374",
+                  status: "Data-driven exploration",
+                  statusClass: "kickoff",
+                  links: [
+                    { label: "See full analysis", href: "#" },
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1374" },
+                  ],
+                  update: "Pulled Kusto telemetry data to validate assumptions. Shared exploration branch with Junjie.",
+                  details: [
+                    "Created branch 'create-agent-exploration' with multiple approaches",
+                    "Waiting for additional telemetry before narrowing to a specific hypothesis",
+                    "Scheduled discussion with Junjie to review findings",
+                  ],
+                  next: "Review telemetry results and form stronger hypotheses before committing to a direction.",
+                  gallery: true,
+                },
+                {
+                  name: "Region availability iteration",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1118",
+                  status: "Iterating",
+                  statusClass: "progress",
+                  links: [
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1118" },
+                  ],
+                  update: "Design review with PM team completed. Iterating on UX. Prioritizing Copilot skill experience path first.",
+                  details: [
+                    "PM review completed — moving forward with iterations",
+                    "Decision: Copilot skill experience is the priority path",
+                  ],
+                  next: "Continue iteration on the Copilot skill UX direction.",
+                  gallery: false,
+                },
+                {
+                  name: "Create hosted agent page improvement",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1373",
+                  status: "Iteration",
+                  statusClass: "progress",
+                  links: [
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1373" },
+                  ],
+                  update: "No dedicated updates this week — focus shifted to create-agent exploration and toolbox.",
+                  details: [],
+                  next: "Resume iteration once create-agent exploration findings are reviewed.",
+                  gallery: true,
+                },
+                {
+                  name: "Auth redesign - agent user impersonation",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1405",
+                  status: "Not started this week",
+                  statusClass: "kickoff",
+                  links: [
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1405" },
+                  ],
+                  update: "No progress this week.",
+                  details: [],
+                  next: "Pick up when bandwidth allows.",
+                  gallery: false,
+                },
+              ],
+            },
+
+            {
+              heading: "Fluent → VSCode",
+              emoji: "⭐",
+              items: [
+                {
+                  name: "Design System: VS Code Extension",
+                  issue: "https://github.com/coreai-microsoft/caidr/issues/1351",
+                  status: "Nearing milestone",
+                  statusClass: "progress",
+                  links: [
+                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1351" },
+                  ],
+                  update: "Only 2-3 components remaining before first round is ready. Encouraged team to start testing and report bugs.",
+                  details: [
+                    "Near-complete on first round of component migration",
+                    "Leo found a bug — directed teammates to contact Amy or Hui for issues",
+                    "Active testing phase beginning",
+                  ],
+                  next: "Finish remaining 2-3 components. Continue bug fixes as team tests.",
+                  gallery: false,
+                },
+              ],
+            },
+          ],
+
+          completed: [
+            {
+              name: "New IA Iteration",
+              issue: "https://github.com/coreai-microsoft/caidr/issues/1103",
+              links: [
+                { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1103" },
+              ],
+              update: "Implementation complete. Yimin closed out remaining items.",
+              video: {
+                label: "Demo recording",
+                href: "https://microsoftapc-my.sharepoint.com/:v:/g/personal/yiminjin_microsoft_com/IQAIt9VzZsS5R4KSAyNTFCxNARiVJkIM2tGqmY5r-OkmDk8?e=TSnlIC",
+              },
+              collapsedNotes: [
+                "Model details consolidation and model playground are out of scope for this round",
+                "Local resources and connected resources are out of scope for this round",
+              ],
+              gallery: false,
+            },
+          ],
+
+          backlog: [
+            "Minor - Main CTA for tool catalog when new features added",
+            "Agentic workflow",
+            "Telemetry we would like to track",
+            "Long running task support",
+            "Guardrails",
+            "Activity protocol??",
+            "Managed agent",
+            "Voice Live (Leo will follow up with portal PM)",
+          ],
+        },
+
         // ── Week 1: Jul 5-11 ──
         {
           title: "Amy's Design Update",
@@ -797,6 +999,28 @@
           });
           html += `</div>`;
         });
+
+        // completed
+        if (report.completed && report.completed.length) {
+          html += `<div class="section completed-section">`;
+          html += `<div class="section-head">✅ Completed</div>`;
+          report.completed.forEach((item) => {
+            html += `<div class="card">`;
+            if (item.name) {
+              const linksHtml = item.links.map((l, i) => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a><button class="edit-link" data-edit-idx="${i}" title="Edit link">✎</button>`).join(" ");
+              html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
+            }
+            html += `<div class="status-line"><span class="status-tag completed">Completed</span></div>`;
+            if (item.update) html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
+            if (item.video) html += `<div class="field-row"><a class="video-link" href="${esc(item.video.href)}" target="_blank" rel="noreferrer">${esc(item.video.label)}</a></div>`;
+            if (item.collapsedNotes && item.collapsedNotes.length) {
+              html += `<details class="collapsed-notes"><summary>Notes</summary><div class="notes-body"><ul>${item.collapsedNotes.map((n) => `<li>${n}</li>`).join("")}</ul></div></details>`;
+            }
+            if (item.gallery) html += `<div class="gallery" data-gallery="${esc(item.name)}" style="display:none"></div>`;
+            html += `</div>`;
+          });
+          html += `</div>`;
+        }
 
         // backlog
         if (report.backlog.length) {
