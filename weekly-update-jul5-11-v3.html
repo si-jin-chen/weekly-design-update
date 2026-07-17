@@ -557,29 +557,9 @@
                     { label: "Link to PRD", href: "#" },
                     { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1162" },
                   ],
-                  update: "Reviewed Ikuyo's optimized prompt-agent creation flow. Significant customization capability for customers confirmed.",
-                  details: [
-                    "Inline dataset creation deferred while broader dataset UX improvements proceed",
-                    "Prompt-agent creation flow reviewed and approved direction",
-                  ],
-                  next: "Continue refining the optimization flow with eng.",
-                  gallery: true,
-                },
-                {
-                  name: "GitHub Copilot App Canvas MVP",
-                  issue: "https://github.com/coreai-microsoft/caidr/issues/1404",
-                  status: "Fit and finish",
-                  statusClass: "done",
-                  links: [
-                    { label: "Prototype link", href: "#" },
-                    { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1404" },
-                  ],
-                  update: "Investigating design language with Tian. Exploring portal patterns as foundation for the VS Code experience.",
-                  details: [
-                    "Exploring whether portal design patterns can be reused and restyled for MVP",
-                    "Shared demo repo with Leo for metrics/access discussion",
-                  ],
-                  next: "Finalize design language direction and begin restyling MVP experiences.",
+                  update: "MVP implemented — releasing this week/next. Advanced config explored but pausing until MVP telemetry lands.",
+                  details: [],
+                  next: "Fit-and-finish pass before release.",
                   gallery: true,
                 },
               ],
@@ -596,15 +576,12 @@
                   statusClass: "progress",
                   links: [
                     { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1439" },
+                    { label: "Coded prototype branch", href: "https://github.com/microsoft/Skylight/tree/toolbox-in-prompt-agent-design" },
+                    { label: "Figma exploration", href: "https://www.figma.com/design/5j8RcCHJiPBmf2G219FJcR/Post-Build-%7C-Foundry-Toolkit-VSCode-Extension?node-id=16045-74577&t=subdHDSc4Keus4Kl-1" },
                   ],
                   update: "Received portal designs. Built coded prototype with 3 variants. Team selected variant #2.",
-                  details: [
-                    "Created branch 'toolbox-in-prompt-agent-design' with coded prototype",
-                    "Explored 3 TOOL section variants — leadership wanted to see coded experience",
-                    "Design team selected variant #2",
-                    "Awaiting feedback from Junjie and Xiaofu",
-                  ],
-                  next: "Incorporate Junjie/Xiaofu feedback and finalize variant #2 for implementation.",
+                  details: [],
+                  next: "Incorporate Junjie/Xiaofu feedback and finalize for implementation.",
                   gallery: true,
                 },
                 {
@@ -613,16 +590,12 @@
                   status: "Data-driven exploration",
                   statusClass: "kickoff",
                   links: [
-                    { label: "See full analysis", href: "#" },
                     { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1374" },
+                    { label: "Exploration branch", href: "https://github.com/microsoft/Skylight/tree/create-agent-exploration" },
                   ],
-                  update: "Pulled Kusto telemetry data to validate assumptions. Shared exploration branch with Junjie.",
-                  details: [
-                    "Created branch 'create-agent-exploration' with multiple approaches",
-                    "Waiting for additional telemetry before narrowing to a specific hypothesis",
-                    "Scheduled discussion with Junjie to review findings",
-                  ],
-                  next: "Review telemetry results and form stronger hypotheses before committing to a direction.",
+                  update: "Pulled Kusto telemetry to validate assumptions. Shared exploration branch with Junjie.",
+                  details: [],
+                  next: "Review telemetry and form stronger hypotheses before committing to a direction.",
                   gallery: true,
                 },
                 {
@@ -633,11 +606,8 @@
                   links: [
                     { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1118" },
                   ],
-                  update: "Design review with PM team completed. Iterating on UX. Prioritizing Copilot skill experience path first.",
-                  details: [
-                    "PM review completed — moving forward with iterations",
-                    "Decision: Copilot skill experience is the priority path",
-                  ],
+                  update: "PM design review completed. Prioritizing Copilot skill experience path first.",
+                  details: [],
                   next: "Continue iteration on the Copilot skill UX direction.",
                   gallery: false,
                 },
@@ -681,14 +651,12 @@
                   statusClass: "progress",
                   links: [
                     { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1351" },
+                    { label: "Storybook", href: "https://purple-dune-053405210.2.azurestaticapps.net/?path=/story/introduction--introduction" },
+                    { label: "npm package", href: "https://www.npmjs.com/package/vsc-ui-react?activeTab=readme" },
                   ],
-                  update: "Only 2-3 components remaining before first round is ready. Encouraged team to start testing and report bugs.",
-                  details: [
-                    "Near-complete on first round of component migration",
-                    "Leo found a bug — directed teammates to contact Amy or Hui for issues",
-                    "Active testing phase beginning",
-                  ],
-                  next: "Finish remaining 2-3 components. Continue bug fixes as team tests.",
+                  update: "All target components wrapped up. Encouraging team to start testing and report bugs.",
+                  details: [],
+                  next: "Team testing phase — collect bug reports and iterate.",
                   gallery: false,
                 },
               ],
@@ -697,12 +665,27 @@
 
           completed: [
             {
+              name: "GitHub Copilot App Canvas MVP",
+              issue: "https://github.com/coreai-microsoft/caidr/issues/1404",
+              links: [
+                { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1404" },
+              ],
+              video: {
+                label: "Demo recording",
+                href: "https://microsoftapc-my.sharepoint.com/:v:/g/personal/qinzhu_microsoft_com/IQBr-7vmj4-hSY61ekSaoGBVAWkm_zNIJrmvi4mJ-SznqzQ?e=HYY6Uj",
+              },
+              collapsedNotes: [
+                "Added to awesome-copilot — searchable & installable from GHCP plugins",
+                "Waiting for official launch, then gather telemetry and feedback",
+              ],
+              gallery: false,
+            },
+            {
               name: "New IA Iteration",
               issue: "https://github.com/coreai-microsoft/caidr/issues/1103",
               links: [
                 { label: "GitHub Issue", href: "https://github.com/coreai-microsoft/caidr/issues/1103" },
               ],
-              update: "Implementation complete. Yimin closed out remaining items.",
               video: {
                 label: "Demo recording",
                 href: "https://microsoftapc-my.sharepoint.com/:v:/g/personal/yiminjin_microsoft_com/IQAIt9VzZsS5R4KSAyNTFCxNARiVJkIM2tGqmY5r-OkmDk8?e=TSnlIC",
@@ -716,14 +699,9 @@
           ],
 
           backlog: [
-            "Minor - Main CTA for tool catalog when new features added",
-            "Agentic workflow",
-            "Telemetry we would like to track",
-            "Long running task support",
-            "Guardrails",
-            "Activity protocol??",
             "Managed agent",
             "Voice Live (Leo will follow up with portal PM)",
+            "Guardrails",
           ],
         },
 
@@ -964,6 +942,27 @@
           )
           .join("");
         html += `<div class="header"><h1>${report.title}</h1><div style="display:flex;gap:8px;align-items:center"><select class="week-select" id="week-select">${options}</select><button id="export-btn" style="height:32px;padding:0 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;white-space:nowrap" title="Export screenshots for GitHub posting">💾 Export</button></div></div>`;
+        html += `<p style="font-size:12px;color:var(--text2);margin:-4px 0 12px 0;opacity:0.7">Grouped by current lifecycle stage, not by what was worked on this week.</p>`;
+
+        // completed (shown first)
+        if (report.completed && report.completed.length) {
+          html += `<div class="section completed-section">`;
+          html += `<div class="section-head">✅ Completed</div>`;
+          report.completed.forEach((item) => {
+            html += `<div class="card">`;
+            if (item.name) {
+              const linksHtml = item.links.map((l, i) => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a><button class="edit-link" data-edit-idx="${i}" title="Edit link">✎</button>`).join(" ");
+              html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
+            }
+            if (item.video) html += `<div class="field-row"><a class="video-link" href="${esc(item.video.href)}" target="_blank" rel="noreferrer">${esc(item.video.label)}</a></div>`;
+            if (item.collapsedNotes && item.collapsedNotes.length) {
+              html += `<details class="collapsed-notes"><summary>Notes</summary><div class="notes-body"><ul>${item.collapsedNotes.map((n) => `<li>${n}</li>`).join("")}</ul></div></details>`;
+            }
+            if (item.gallery) html += `<div class="gallery" data-gallery="${esc(item.name)}" style="display:none"></div>`;
+            html += `</div>`;
+          });
+          html += `</div>`;
+        }
 
         // sections
         report.sections.forEach((sec) => {
@@ -992,6 +991,9 @@
             if (item.next) {
               html += `<div class="field-row"><span class="field-label">Next step:</span> ${esc(item.next)}</div>`;
             }
+            if (item.video) {
+              html += `<div class="field-row"><a class="video-link" href="${esc(item.video.href)}" target="_blank" rel="noreferrer">${esc(item.video.label)}</a></div>`;
+            }
             if (item.gallery) {
               html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
             }
@@ -999,28 +1001,6 @@
           });
           html += `</div>`;
         });
-
-        // completed
-        if (report.completed && report.completed.length) {
-          html += `<div class="section completed-section">`;
-          html += `<div class="section-head">✅ Completed</div>`;
-          report.completed.forEach((item) => {
-            html += `<div class="card">`;
-            if (item.name) {
-              const linksHtml = item.links.map((l, i) => `<a href="${esc(l.href)}" target="_blank" rel="noreferrer">${esc(l.label)}</a><button class="edit-link" data-edit-idx="${i}" title="Edit link">✎</button>`).join(" ");
-              html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
-            }
-            html += `<div class="status-line"><span class="status-tag completed">Completed</span></div>`;
-            if (item.update) html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
-            if (item.video) html += `<div class="field-row"><a class="video-link" href="${esc(item.video.href)}" target="_blank" rel="noreferrer">${esc(item.video.label)}</a></div>`;
-            if (item.collapsedNotes && item.collapsedNotes.length) {
-              html += `<details class="collapsed-notes"><summary>Notes</summary><div class="notes-body"><ul>${item.collapsedNotes.map((n) => `<li>${n}</li>`).join("")}</ul></div></details>`;
-            }
-            if (item.gallery) html += `<div class="gallery" data-gallery="${esc(item.name)}" style="display:none"></div>`;
-            html += `</div>`;
-          });
-          html += `</div>`;
-        }
 
         // backlog
         if (report.backlog.length) {
