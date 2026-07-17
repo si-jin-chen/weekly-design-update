@@ -1070,9 +1070,10 @@
       };
       function loadScreenshots() {
         try {
-          const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-          // Only show embedded screenshots for the latest week (index 0)
           const weekIdx = weeks.indexOf(report);
+          const weekKey = STORAGE_KEY + "-week" + weekIdx;
+          const stored = JSON.parse(localStorage.getItem(weekKey) || "{}");
+          // Only show embedded screenshots for the latest week (index 0)
           if (weekIdx === 0 && Object.keys(EMBEDDED_SCREENSHOTS).length) {
             return { ...EMBEDDED_SCREENSHOTS, ...stored };
           }
@@ -1082,6 +1083,8 @@
         }
       }
       function saveScreenshots() {
+        const weekIdx = weeks.indexOf(report);
+        const weekKey = STORAGE_KEY + "-week" + weekIdx;
         const data = {};
         document.querySelectorAll("[data-gallery]").forEach((g) => {
           const key = g.dataset.gallery;
@@ -1094,7 +1097,7 @@
           });
           if (items.length) data[key] = items;
         });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(weekKey, JSON.stringify(data));
       }
 
       // gallery: add, remove, resize, drag-drop
