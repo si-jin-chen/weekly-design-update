@@ -1542,7 +1542,19 @@
       // Export screenshots as JSON file for GitHub posting
       document.addEventListener("click", (e) => {
         if (e.target.id !== "export-btn") return;
-        const data = loadScreenshots();
+        // Export directly from DOM (what you actually see) not from loadScreenshots
+        const data = {};
+        document.querySelectorAll("[data-gallery]").forEach((g) => {
+          const key = g.dataset.gallery;
+          const items = [...g.querySelectorAll(".thumb")].map((thumb) => {
+            const img = thumb.querySelector("img");
+            const entry = { src: img.src };
+            if (thumb.style.width) entry.width = thumb.style.width;
+            if (thumb.style.height) entry.height = thumb.style.height;
+            return entry;
+          });
+          if (items.length) data[key] = items;
+        });
         if (!Object.keys(data).length) {
           alert("No screenshots to export.");
           return;
