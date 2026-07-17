@@ -527,9 +527,10 @@
       .collapsed-notes .notes-body li { margin-bottom: 2px; }
       .video-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; margin-top: 4px; }
       .video-link::before { content: '🎬'; }
-      .resource-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-      .resource-chips a { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--surface); border: 1px solid var(--border); color: var(--accent); text-decoration: none; white-space: nowrap; }
-      .resource-chips a:hover { background: var(--border); color: var(--text); }
+      .resource-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+      .resource-chips a { font-size: 11px; color: var(--text2); text-decoration: none; }
+      .resource-chips a:hover { color: var(--accent); text-decoration: underline; }
+      .resource-chips a::before { content: '→ '; opacity: 0.5; }
     </style>
   </head>
   <body>
