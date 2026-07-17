@@ -641,6 +641,7 @@
                   update: "PM design review completed. Prioritizing Copilot skill experience path first.",
                   details: [],
                   next: "Resume when Copilot skill path is resolved.",
+                  collapsed: true,
                   gallery: false,
                 },
               ],
@@ -992,6 +993,7 @@
                 .join(" ");
               html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
             }
+            if (item.collapsed) html += `<details class="collapsed-notes"><summary style="font-size:12px;color:var(--text2);padding:4px 0">Show details (same as last week)</summary>`;
             if (item.update) {
               html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
             }
@@ -1014,6 +1016,7 @@
             if (item.gallery) {
               html += `<div class="gallery" data-gallery="${esc(item.name || sec.heading)}" style="display:none"></div>`;
             }
+            if (item.collapsed) html += `</details>`;
             html += `</div>`;
           });
           html += `</div>`;
