@@ -994,9 +994,6 @@
                 .join(" ");
               html += `<div class="card-head"><span class="card-title">${esc(item.name)}</span><div class="card-links" data-item-id="${esc(item.name)}">${linksHtml}<button class="add-link" title="Add link">+</button></div></div>`;
             }
-            if (item.status) {
-              html += `<div class="status-line"><span class="status-tag ${item.statusClass}">${esc(item.status)}</span></div>`;
-            }
             if (item.update) {
               html += `<div class="field-row"><span class="field-label">Update:</span> ${esc(item.update)}</div>`;
             }
