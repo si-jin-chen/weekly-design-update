@@ -946,7 +946,7 @@
         const options = weeks
           .map(
             (w, i) =>
-              `<option value="${i}"${w === report ? " selected" : ""}>${esc(w.date)}</option>`,
+              `<option value="${i}"${w === report ? " selected" : ""}>${esc(w.date)}${i === 0 ? " (latest)" : ""}</option>`,
           )
           .join("");
         html += `<div class="header"><h1>${report.title}</h1><div style="display:flex;gap:8px;align-items:center"><select class="week-select" id="week-select">${options}</select><button id="export-btn" style="height:32px;padding:0 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;white-space:nowrap" title="Export screenshots for GitHub posting">💾 Export</button></div></div>`;
@@ -1071,12 +1071,14 @@
       function loadScreenshots() {
         try {
           const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-          // Merge: embedded data as fallback, localStorage overrides
-          return Object.keys(EMBEDDED_SCREENSHOTS).length
-            ? { ...EMBEDDED_SCREENSHOTS, ...stored }
-            : stored;
+          // Only show embedded screenshots for the latest week (index 0)
+          const weekIdx = weeks.indexOf(report);
+          if (weekIdx === 0 && Object.keys(EMBEDDED_SCREENSHOTS).length) {
+            return { ...EMBEDDED_SCREENSHOTS, ...stored };
+          }
+          return stored;
         } catch {
-          return EMBEDDED_SCREENSHOTS;
+          return weeks.indexOf(report) === 0 ? EMBEDDED_SCREENSHOTS : {};
         }
       }
       function saveScreenshots() {
