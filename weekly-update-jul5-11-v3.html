@@ -1136,9 +1136,18 @@
           const weekIdx = weeks.indexOf(report);
           const weekKey = STORAGE_KEY + "-week" + weekIdx;
           const stored = JSON.parse(localStorage.getItem(weekKey) || "{}");
-          // Only show embedded screenshots for the latest week (index 0)
           if (weekIdx === 0 && Object.keys(EMBEDDED_SCREENSHOTS).length) {
-            return { ...EMBEDDED_SCREENSHOTS, ...stored };
+            // EMBEDDED is source of truth. stored has only user-added extras.
+            const merged = {};
+            const allKeys = new Set([...Object.keys(EMBEDDED_SCREENSHOTS), ...Object.keys(stored)]);
+            for (const key of allKeys) {
+              const embeddedItems = EMBEDDED_SCREENSHOTS[key] || [];
+              const storedItems = stored[key] || [];
+              // Embedded always come first, then user-added items (not duplicates)
+              const embeddedSrcs = new Set(embeddedItems.map(e => e.src.slice(0, 100)));
+              merged[key] = [...embeddedItems, ...storedItems.filter(s => !embeddedSrcs.has((s.src || "").slice(0, 100)))];
+            }
+            return merged;
           }
           return stored;
         } catch {
@@ -1158,7 +1167,14 @@
             if (thumb.style.height) entry.height = thumb.style.height;
             return entry;
           });
-          if (items.length) data[key] = items;
+          // For week 0, only save user-added images (not already in EMBEDDED)
+          if (weekIdx === 0 && EMBEDDED_SCREENSHOTS[key]) {
+            const embeddedSrcs = new Set(EMBEDDED_SCREENSHOTS[key].map(e => e.src.slice(0, 100)));
+            const userOnly = items.filter(item => !embeddedSrcs.has((item.src || "").slice(0, 100)));
+            if (userOnly.length) data[key] = userOnly;
+          } else {
+            if (items.length) data[key] = items;
+          }
         });
         localStorage.setItem(weekKey, JSON.stringify(data));
       }
