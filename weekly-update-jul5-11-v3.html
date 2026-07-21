@@ -9,7 +9,8 @@
         box-sizing: border-box;
         margin: 0;
       }
-      :root {
+      :root,
+      [data-theme="dark"] {
         --bg: #13161c;
         --surface: #1e2128;
         --border: #2e323a;
@@ -23,6 +24,27 @@
         --warn: #fbbf24;
         --danger: #fb7185;
         --pause: #8b919c;
+        --shadow: rgba(0, 0, 0, 0.4);
+        --lightbox-bg: rgba(0, 0, 0, 0.85);
+        --thumb-bg: #10131a;
+      }
+      [data-theme="light"] {
+        --bg: #f5f6f8;
+        --surface: #ffffff;
+        --border: #d8dce3;
+        --border-h: #c4c9d2;
+        --text: #1a1d24;
+        --text2: #5c6270;
+        --text3: #8b919c;
+        --link: #2563eb;
+        --accent: #7c3aed;
+        --success: #059669;
+        --warn: #d97706;
+        --danger: #e11d48;
+        --pause: #8b919c;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --lightbox-bg: rgba(0, 0, 0, 0.6);
+        --thumb-bg: #eef0f4;
       }
       body {
         font:
@@ -189,7 +211,7 @@
         padding: 4px 0;
         z-index: 50;
         min-width: 140px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 12px var(--shadow);
       }
       .add-menu button {
         display: block;
@@ -211,7 +233,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: var(--lightbox-bg);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -268,8 +290,11 @@
       }
       .link-edit-actions button.primary {
         background: var(--link);
-        color: #13161c;
+        color: #fff;
         border-color: var(--link);
+      }
+      [data-theme="dark"] .link-edit-actions button.primary {
+        color: #13161c;
       }
       .link-edit-actions button.danger {
         color: var(--danger);
@@ -362,7 +387,7 @@
         overflow: visible;
         position: relative;
         border: 1px solid var(--border);
-        background: #10131a;
+        background: var(--thumb-bg);
         cursor: default;
         flex-shrink: 0;
       }
@@ -380,7 +405,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.85);
+        background: var(--lightbox-bg);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -393,6 +418,25 @@
         border-radius: 8px;
         box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
       }
+      .theme-toggle {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text2);
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: border-color 0.15s;
+      }
+      .theme-toggle:hover {
+        border-color: var(--border-h);
+        color: var(--text);
+      }
       .gallery .thumb .remove {
         position: absolute;
         top: -6px;
@@ -400,7 +444,7 @@
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: rgba(0, 0, 0, 0.7);
+        background: var(--text3);
         color: #fff;
         font-size: 11px;
         line-height: 18px;
@@ -465,7 +509,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: rgba(0, 0, 0, 0.6);
+        background: var(--text3);
         color: #fff;
         font-size: 12px;
         line-height: 20px;
@@ -949,7 +993,7 @@
               `<option value="${i}"${w === report ? " selected" : ""}>${esc(w.date)}${i === 0 ? " (latest)" : ""}</option>`,
           )
           .join("");
-        html += `<div class="header"><h1>${report.title}</h1><div style="display:flex;gap:8px;align-items:center"><select class="week-select" id="week-select">${options}</select><button id="export-btn" style="height:32px;padding:0 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;white-space:nowrap" title="Export screenshots for GitHub posting">💾 Export</button></div></div>`;
+        html += `<div class="header"><h1>${report.title}</h1><div style="display:flex;gap:8px;align-items:center"><select class="week-select" id="week-select">${options}</select><button id="export-btn" style="height:32px;padding:0 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;white-space:nowrap" title="Export screenshots for GitHub posting">💾 Export</button><button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">${document.documentElement.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'}</button></div></div>`;
         html += `<p style="font-size:12px;color:var(--text2);margin:-4px 0 12px 0;opacity:0.7">Grouped by current lifecycle stage, not by what was worked on this week.</p>`;
 
         // completed (shown first)
@@ -1309,6 +1353,26 @@
       }
 
       render();
+
+      // ── theme toggle ──
+      (function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      })();
+
+      document.addEventListener("click", (e) => {
+        if (e.target.closest("#theme-toggle")) {
+          const html = document.documentElement;
+          const current = html.getAttribute("data-theme");
+          const next = current === "light" ? "dark" : "light";
+          html.setAttribute("data-theme", next);
+          localStorage.setItem("theme", next);
+          const btn = document.getElementById("theme-toggle");
+          if (btn) btn.textContent = next === "light" ? "🌙" : "☀️";
+        }
+      });
 
       // week selector
       document.addEventListener("change", (e) => {
